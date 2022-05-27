@@ -1,0 +1,11 @@
+{
+  "name": "elm-shop",
+  "devDependencies": {
+    "dataman": "github:pravdomil/dataman",
+    "elm-data": "github:pravdomil/elm-data",
+    "elm-ffi": "github:pravdomil/elm-ffi",
+    "elm-ffi-node": "github:pravdomil/elm-ffi-node",
+    "elm-utils": "github:pravdomil/elm-utils",
+    "pravdomil-ui": "github:pravdomil/pravdomil-ui"
+  }
+}

@@ -1,0 +1,14 @@
+[Unit]
+Description=ElmShop
+After=network.target
+
+[Service]
+User=paul
+WorkingDirectory=/home/paul/ElmShop/.app
+Environment=listenOptions='{"path":"../index.sock"}'
+ExecStartPre=/usr/bin/npm install --only=production
+ExecStart=/usr/bin/node main.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
