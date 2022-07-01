@@ -22,6 +22,8 @@ type alias Warehouse =
 codec : Codec.Codec Warehouse
 codec =
     Codec.object Warehouse
+        |> Codec.field "id" .id Id.codec
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.buildObject
 
@@ -38,7 +40,5 @@ type alias Translation =
 translationCodec : Codec.Codec Translation
 translationCodec =
     Codec.object Translation
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.buildObject
