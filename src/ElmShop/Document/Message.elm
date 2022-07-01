@@ -12,7 +12,7 @@ type alias Message =
     , meta : ElmShop.Document.Utils.Meta.Meta
 
     --
-    , type_ : Type_
+    , type_ : Type
     , message : Content
     , related : List (Reference.Reference ())
     }
@@ -53,13 +53,13 @@ contentCodec =
 --
 
 
-type Type_
+type Type
     = Info
     | Warning
     | Error
 
 
-typeCodec : Codec.Codec Type_
+typeCodec : Codec.Codec Type
 typeCodec =
     Codec.custom
         (\fn1 fn2 fn3 v ->
