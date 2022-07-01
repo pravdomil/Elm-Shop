@@ -4,7 +4,10 @@ import Codec
 import ElmShop.Document.Type
 import ElmShop.Document.Utils.Meta
 import Id
+import Id.Random
 import Reference
+import Task
+import Task.Extra
 
 
 type alias Session =
@@ -15,6 +18,22 @@ type alias Session =
     , user : Maybe (Reference.Reference ElmShop.Document.Type.User)
     , order : Maybe (Reference.Reference ElmShop.Document.Type.Order)
     }
+
+
+create : Task.Task x Session
+create =
+    Task.succeed
+        (\x x2 ->
+            { id = x
+            , meta = x2
+
+            --
+            , user = Nothing
+            , order = Nothing
+            }
+        )
+        |> Task.Extra.apply Id.Random.generate
+        |> Task.Extra.apply ElmShop.Document.Utils.Meta.create
 
 
 codec : Codec.Codec Session
