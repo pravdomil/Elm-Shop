@@ -31,7 +31,7 @@ create =
             , meta = x2
 
             --
-            , name = ElmShop.Document.Utils.Name.fromString "Admin" |> Maybe.withDefault ElmShop.Document.Utils.Name.paul
+            , name = ElmShop.Document.Utils.Name.fromString "Admin" |> Maybe.withDefault ElmShop.Document.Utils.Name.default
             , email = Nothing
             , password = x3
             }
