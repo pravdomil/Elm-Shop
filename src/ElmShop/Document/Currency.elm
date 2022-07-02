@@ -31,9 +31,38 @@ type alias Currency =
     }
 
 
+
+--
+
+
+type alias Translation =
+    { name : ElmShop.Document.Utils.Name.Name
+    }
+
+
+
+--
+
+
+type Code
+    = Code String
+
+
+
+--
+
+
+type Rounding
+    = Rounding Int
+
+
+
+--
+
+
 codec : Codec.Codec Currency
 codec =
-    Codec.object Currency
+    Codec.object (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 -> { id = x1, meta = x2, name = x3, translations = x4, code = x5, value = x6, decimalPlaces = x7, rounding = x8, symbolLeft = x9, symbolRight = x10 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
@@ -47,50 +76,6 @@ codec =
         |> Codec.buildObject
 
 
-
---
-
-
-type alias Translation =
-    { name : ElmShop.Document.Utils.Name.Name
-    }
-
-
-translationCodec : Codec.Codec Translation
-translationCodec =
-    Codec.object Translation
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.buildObject
-
-
-
---
-
-
-type Code
-    = Code String
-
-
-codeCodec : Codec.Codec Code
-codeCodec =
-    Codec.custom
-        (\fn1 v ->
-            case v of
-                Code v1 ->
-                    fn1 v1
-        )
-        |> Codec.variant1 "Code" Code Codec.string
-        |> Codec.buildCustom
-
-
-
---
-
-
-type Rounding
-    = Rounding Int
-
-
 roundingCodec : Codec.Codec Rounding
 roundingCodec =
     Codec.custom
@@ -101,3 +86,22 @@ roundingCodec =
         )
         |> Codec.variant1 "Rounding" Rounding Codec.int
         |> Codec.buildCustom
+
+
+codeCodec : Codec.Codec Code
+codeCodec =
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                Code x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "Code" Code Codec.string
+        |> Codec.buildCustom
+
+
+translationCodec : Codec.Codec Translation
+translationCodec =
+    Codec.object (\x1 -> { name = x1 })
+        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
+        |> Codec.buildObject

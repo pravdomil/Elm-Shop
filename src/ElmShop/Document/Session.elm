@@ -36,9 +36,13 @@ create =
         |> Task.Extra.apply ElmShop.Document.Utils.Meta.create
 
 
+
+--
+
+
 codec : Codec.Codec Session
 codec =
-    Codec.object Session
+    Codec.object (\x1 x2 x3 x4 -> { id = x1, meta = x2, user = x3, order = x4 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "user" .user (Codec.maybe Reference.codec)

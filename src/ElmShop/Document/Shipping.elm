@@ -23,16 +23,6 @@ type alias Shipping =
     }
 
 
-codec : Codec.Codec Shipping
-codec =
-    Codec.object Shipping
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "type_" .type_ typeCodec
-        |> Codec.buildObject
-
-
 
 --
 
@@ -43,32 +33,12 @@ type alias Translation =
     }
 
 
-translationCodec : Codec.Codec Translation
-translationCodec =
-    Codec.object Translation
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
-        |> Codec.buildObject
-
-
 
 --
 
 
 type Type
     = Basic_ Basic
-
-
-typeCodec : Codec.Codec Type
-typeCodec =
-    Codec.custom
-        (\fn1 v ->
-            case v of
-                Basic_ v1 ->
-                    fn1 v1
-        )
-        |> Codec.variant1 "Basic_" Basic_ basicCodec
-        |> Codec.buildCustom
 
 
 
@@ -85,11 +55,45 @@ type alias Basic =
     }
 
 
+
+--
+
+
+codec : Codec.Codec Shipping
+codec =
+    Codec.object (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, type_ = x4 })
+        |> Codec.field "id" .id Id.codec
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field "type_" .type_ typeCodec
+        |> Codec.buildObject
+
+
 basicCodec : Codec.Codec Basic
 basicCodec =
-    Codec.object Basic
+    Codec.object (\x1 x2 x3 x4 -> { price = x1, minTotal = x2, maxTotal = x3, filter = x4 })
         |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
         |> Codec.field "minTotal" .minTotal (Codec.maybe ElmShop.Document.Utils.Money.codec)
         |> Codec.field "maxTotal" .maxTotal (Codec.maybe ElmShop.Document.Utils.Money.codec)
         |> Codec.field "filter" .filter (Codec.maybe ElmShop.Document.Utils.CountryFilter.codec)
+        |> Codec.buildObject
+
+
+typeCodec : Codec.Codec Type
+typeCodec =
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                Basic_ x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "Basic_" Basic_ basicCodec
+        |> Codec.buildCustom
+
+
+translationCodec : Codec.Codec Translation
+translationCodec =
+    Codec.object (\x1 x2 -> { name = x1, content = x2 })
+        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
         |> Codec.buildObject

@@ -21,16 +21,6 @@ type alias OrderStatus =
     }
 
 
-codec : Codec.Codec OrderStatus
-codec =
-    Codec.object OrderStatus
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "stock" .stock stockCodec
-        |> Codec.buildObject
-
-
 
 --
 
@@ -39,14 +29,6 @@ type alias Translation =
     { name : ElmShop.Document.Utils.Name.Name
     , content : ElmShop.Document.Utils.Html.Html
     }
-
-
-translationCodec : Codec.Codec Translation
-translationCodec =
-    Codec.object Translation
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
-        |> Codec.buildObject
 
 
 
@@ -59,11 +41,25 @@ type Stock
     | Subtract
 
 
+
+--
+
+
+codec : Codec.Codec OrderStatus
+codec =
+    Codec.object (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, stock = x4 })
+        |> Codec.field "id" .id Id.codec
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field "stock" .stock stockCodec
+        |> Codec.buildObject
+
+
 stockCodec : Codec.Codec Stock
 stockCodec =
     Codec.custom
-        (\fn1 fn2 fn3 v ->
-            case v of
+        (\fn1 fn2 fn3 x ->
+            case x of
                 NoChange ->
                     fn1
 
@@ -77,3 +73,11 @@ stockCodec =
         |> Codec.variant0 "Reserve" Reserve
         |> Codec.variant0 "Subtract" Subtract
         |> Codec.buildCustom
+
+
+translationCodec : Codec.Codec Translation
+translationCodec =
+    Codec.object (\x1 x2 -> { name = x1, content = x2 })
+        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
+        |> Codec.buildObject

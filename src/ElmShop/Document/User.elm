@@ -41,9 +41,13 @@ create =
         |> Task.Extra.apply ElmShop.Document.Utils.Password.create
 
 
+
+--
+
+
 codec : Codec.Codec User
 codec =
-    Codec.object User
+    Codec.object (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, name = x3, email = x4, password = x5 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec

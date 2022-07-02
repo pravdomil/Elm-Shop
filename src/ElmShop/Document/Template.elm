@@ -21,16 +21,6 @@ type alias Template =
     }
 
 
-codec : Codec.Codec Template
-codec =
-    Codec.object Template
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "content" .content contentCodec
-        |> Codec.buildObject
-
-
 
 --
 
@@ -40,20 +30,34 @@ type Content
     | Localized (Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Language) { content : ElmShop.Document.Utils.Html.Html })
 
 
+
+--
+
+
+codec : Codec.Codec Template
+codec =
+    Codec.object (\x1 x2 x3 x4 -> { id = x1, meta = x2, name = x3, content = x4 })
+        |> Codec.field "id" .id Id.codec
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field "content" .content contentCodec
+        |> Codec.buildObject
+
+
 contentCodec : Codec.Codec Content
 contentCodec =
     Codec.custom
-        (\fn1 fn2 v ->
-            case v of
-                Universal v1 ->
-                    fn1 v1
+        (\fn1 fn2 x ->
+            case x of
+                Universal x1 ->
+                    fn1 x1
 
-                Localized v1 ->
-                    fn2 v1
+                Localized x1 ->
+                    fn2 x1
         )
         |> Codec.variant1 "Universal"
             Universal
-            (Codec.object (\v -> { content = v })
+            (Codec.object (\x1 -> { content = x1 })
                 |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
                 |> Codec.buildObject
             )
@@ -61,7 +65,7 @@ contentCodec =
             Localized
             (Dict.Any.Codec.dict Reference.toString
                 Reference.codec
-                (Codec.object (\v -> { content = v })
+                (Codec.object (\x1 -> { content = x1 })
                     |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
                     |> Codec.buildObject
                 )

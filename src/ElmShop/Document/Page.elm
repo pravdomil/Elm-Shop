@@ -22,17 +22,6 @@ type alias Page =
     }
 
 
-codec : Codec.Codec Page
-codec =
-    Codec.object Page
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "parent" .parent (Codec.maybe Reference.codec)
-        |> Codec.field "image" .image (Codec.maybe Reference.codec)
-        |> Codec.buildObject
-
-
 
 --
 
@@ -43,9 +32,24 @@ type alias Translation =
     }
 
 
+
+--
+
+
+codec : Codec.Codec Page
+codec =
+    Codec.object (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, translations = x3, parent = x4, image = x5 })
+        |> Codec.field "id" .id Id.codec
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field "parent" .parent (Codec.maybe Reference.codec)
+        |> Codec.field "image" .image (Codec.maybe Reference.codec)
+        |> Codec.buildObject
+
+
 translationCodec : Codec.Codec Translation
 translationCodec =
-    Codec.object Translation
+    Codec.object (\x1 x2 -> { name = x1, content = x2 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
         |> Codec.buildObject

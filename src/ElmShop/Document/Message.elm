@@ -18,35 +18,12 @@ type alias Message =
     }
 
 
-codec : Codec.Codec Message
-codec =
-    Codec.object Message
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
-        |> Codec.field "type_" .type_ typeCodec
-        |> Codec.field "message" .message contentCodec
-        |> Codec.field "related" .related (Codec.list Reference.codec)
-        |> Codec.buildObject
-
-
 
 --
 
 
 type Content
     = Content String
-
-
-contentCodec : Codec.Codec Content
-contentCodec =
-    Codec.custom
-        (\fn1 v ->
-            case v of
-                Content v1 ->
-                    fn1 v1
-        )
-        |> Codec.variant1 "Content" Content Codec.string
-        |> Codec.buildCustom
 
 
 
@@ -59,11 +36,38 @@ type Type
     | Error
 
 
+
+--
+
+
+codec : Codec.Codec Message
+codec =
+    Codec.object (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, type_ = x3, message = x4, related = x5 })
+        |> Codec.field "id" .id Id.codec
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field "type_" .type_ typeCodec
+        |> Codec.field "message" .message contentCodec
+        |> Codec.field "related" .related (Codec.list Reference.codec)
+        |> Codec.buildObject
+
+
+contentCodec : Codec.Codec Content
+contentCodec =
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                Content x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "Content" Content Codec.string
+        |> Codec.buildCustom
+
+
 typeCodec : Codec.Codec Type
 typeCodec =
     Codec.custom
-        (\fn1 fn2 fn3 v ->
-            case v of
+        (\fn1 fn2 fn3 x ->
+            case x of
                 Info ->
                     fn1
 

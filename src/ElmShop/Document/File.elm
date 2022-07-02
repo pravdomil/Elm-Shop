@@ -21,17 +21,6 @@ type alias File =
     }
 
 
-codec : Codec.Codec File
-codec =
-    Codec.object File
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "url" .url urlCodec
-        |> Codec.buildObject
-
-
 
 --
 
@@ -41,19 +30,27 @@ type alias Translation =
     }
 
 
-translationCodec : Codec.Codec Translation
-translationCodec =
-    Codec.object Translation
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.buildObject
-
-
 
 --
 
 
 type Url
     = Url String
+
+
+
+--
+
+
+codec : Codec.Codec File
+codec =
+    Codec.object (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, name = x3, translations = x4, url = x5 })
+        |> Codec.field "id" .id Id.codec
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field "url" .url urlCodec
+        |> Codec.buildObject
 
 
 urlCodec : Codec.Codec Url
@@ -66,3 +63,10 @@ urlCodec =
         )
         |> Codec.variant1 "Url" Url Codec.string
         |> Codec.buildCustom
+
+
+translationCodec : Codec.Codec Translation
+translationCodec =
+    Codec.object (\x1 -> { name = x1 })
+        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
+        |> Codec.buildObject

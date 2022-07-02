@@ -42,9 +42,41 @@ type alias Site =
     }
 
 
+
+--
+
+
+type Url
+    = Url String
+
+
+
+--
+
+
+type Description
+    = Description String
+
+
+
+--
+
+
+type alias Contact =
+    { email : Maybe ElmShop.Document.Utils.Email.Email
+    , phone : Maybe ElmShop.Document.Utils.Phone.Phone
+    , note : ElmShop.Document.Utils.Note.Note
+    , address : Maybe ElmShop.Document.Utils.Address.Address
+    }
+
+
+
+--
+
+
 codec : Codec.Codec Site
 codec =
-    Codec.object Site
+    Codec.object (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 -> { id = x1, meta = x2, name = x3, url = x4, description = x5, contact = x6, language = x7, homePage = x8, currency = x9, logo = x10, icon = x11, header = x12, footer = x13 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
@@ -60,7 +92,7 @@ codec =
             .header
             (Dict.Any.Codec.dict Reference.toString
                 Reference.codec
-                (Codec.object (\v -> { order = v })
+                (Codec.object (\x1 -> { order = x1 })
                     |> Codec.field "order" .order ElmShop.Document.Utils.Order.codec
                     |> Codec.buildObject
                 )
@@ -69,7 +101,7 @@ codec =
             .footer
             (Dict.Any.Codec.dict Reference.toString
                 Reference.codec
-                (Codec.object (\v -> { order = v })
+                (Codec.object (\x1 -> { order = x1 })
                     |> Codec.field "order" .order ElmShop.Document.Utils.Order.codec
                     |> Codec.buildObject
                 )
@@ -77,12 +109,26 @@ codec =
         |> Codec.buildObject
 
 
+contactCodec : Codec.Codec Contact
+contactCodec =
+    Codec.object (\x1 x2 x3 x4 -> { email = x1, phone = x2, note = x3, address = x4 })
+        |> Codec.field "email" .email (Codec.maybe ElmShop.Document.Utils.Email.codec)
+        |> Codec.field "phone" .phone (Codec.maybe ElmShop.Document.Utils.Phone.codec)
+        |> Codec.field "note" .note ElmShop.Document.Utils.Note.codec
+        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
+        |> Codec.buildObject
 
---
 
-
-type Url
-    = Url String
+descriptionCodec : Codec.Codec Description
+descriptionCodec =
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                Description x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "Description" Description Codec.string
+        |> Codec.buildCustom
 
 
 urlCodec : Codec.Codec Url
@@ -95,45 +141,3 @@ urlCodec =
         )
         |> Codec.variant1 "Url" Url Codec.string
         |> Codec.buildCustom
-
-
-
---
-
-
-type Description
-    = Description String
-
-
-descriptionCodec : Codec.Codec Description
-descriptionCodec =
-    Codec.custom
-        (\fn1 v ->
-            case v of
-                Description v1 ->
-                    fn1 v1
-        )
-        |> Codec.variant1 "Description" Description Codec.string
-        |> Codec.buildCustom
-
-
-
---
-
-
-type alias Contact =
-    { email : Maybe ElmShop.Document.Utils.Email.Email
-    , phone : Maybe ElmShop.Document.Utils.Phone.Phone
-    , note : ElmShop.Document.Utils.Note.Note
-    , address : Maybe ElmShop.Document.Utils.Address.Address
-    }
-
-
-contactCodec : Codec.Codec Contact
-contactCodec =
-    Codec.object Contact
-        |> Codec.field "email" .email (Codec.maybe ElmShop.Document.Utils.Email.codec)
-        |> Codec.field "phone" .phone (Codec.maybe ElmShop.Document.Utils.Phone.codec)
-        |> Codec.field "note" .note ElmShop.Document.Utils.Note.codec
-        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
-        |> Codec.buildObject

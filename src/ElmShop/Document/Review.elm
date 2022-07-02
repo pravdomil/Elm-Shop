@@ -20,9 +20,21 @@ type alias Review =
     }
 
 
+
+--
+
+
+type Rating
+    = Rating Int
+
+
+
+--
+
+
 codec : Codec.Codec Review
 codec =
-    Codec.object Review
+    Codec.object (\x1 x2 x3 x4 x5 x6 -> { id = x1, meta = x2, order = x3, product = x4, content = x5, rating = x6 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "order" .order Reference.codec
@@ -32,21 +44,13 @@ codec =
         |> Codec.buildObject
 
 
-
---
-
-
-type Rating
-    = Rating Int
-
-
 ratingCodec : Codec.Codec Rating
 ratingCodec =
     Codec.custom
-        (\fn1 v ->
-            case v of
-                Rating v1 ->
-                    fn1 v1
+        (\fn1 x ->
+            case x of
+                Rating x1 ->
+                    fn1 x1
         )
         |> Codec.variant1 "Rating" Rating Codec.int
         |> Codec.buildCustom
