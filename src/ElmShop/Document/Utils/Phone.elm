@@ -23,14 +23,24 @@ toString (Phone a) =
 
 codec : Codec.Codec Phone
 codec =
-    Codec.string
-        |> Codec.andThen
-            (\x ->
-                case fromString x of
-                    Just x2 ->
-                        Codec.succeed x2
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                Phone x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "Phone"
+            Phone
+            (Codec.string
+                |> Codec.andThen
+                    (\x ->
+                        case fromString x of
+                            Just x2 ->
+                                Codec.succeed (toString x2)
 
-                    Nothing ->
-                        Codec.fail "Cannot decode phone."
+                            Nothing ->
+                                Codec.fail "Cannot decode phone."
+                    )
+                    identity
             )
-            toString
+        |> Codec.buildCustom

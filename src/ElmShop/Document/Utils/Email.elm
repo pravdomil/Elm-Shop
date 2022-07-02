@@ -23,14 +23,24 @@ toString (Email a) =
 
 codec : Codec.Codec Email
 codec =
-    Codec.string
-        |> Codec.andThen
-            (\x ->
-                case fromString x of
-                    Just x2 ->
-                        Codec.succeed x2
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                Email x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "Email"
+            Email
+            (Codec.string
+                |> Codec.andThen
+                    (\x ->
+                        case fromString x of
+                            Just x2 ->
+                                Codec.succeed (toString x2)
 
-                    Nothing ->
-                        Codec.fail "Cannot decode e-mail."
+                            Nothing ->
+                                Codec.fail "Cannot decode e-mail."
+                    )
+                    identity
             )
-            toString
+        |> Codec.buildCustom

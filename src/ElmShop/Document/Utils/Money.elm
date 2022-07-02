@@ -53,14 +53,24 @@ decimalPlacesToInt (DecimalPlaces a) =
 
 decimalPlacesCodec : Codec.Codec DecimalPlaces
 decimalPlacesCodec =
-    Codec.int
-        |> Codec.andThen
-            (\x ->
-                case intToDecimalPlaces x of
-                    Just x2 ->
-                        Codec.succeed x2
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                DecimalPlaces x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "DecimalPlaces"
+            DecimalPlaces
+            (Codec.int
+                |> Codec.andThen
+                    (\x ->
+                        case intToDecimalPlaces x of
+                            Just x2 ->
+                                Codec.succeed (decimalPlacesToInt x2)
 
-                    Nothing ->
-                        Codec.fail "Cannot decode decimal places."
+                            Nothing ->
+                                Codec.fail "Cannot decode decimal places."
+                    )
+                    identity
             )
-            decimalPlacesToInt
+        |> Codec.buildCustom

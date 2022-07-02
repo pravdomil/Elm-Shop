@@ -32,14 +32,24 @@ toString (Password a) =
 
 codec : Codec.Codec Password
 codec =
-    Codec.string
-        |> Codec.andThen
-            (\x ->
-                case fromString x of
-                    Just x2 ->
-                        Codec.succeed x2
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                Password x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "Password"
+            Password
+            (Codec.string
+                |> Codec.andThen
+                    (\x ->
+                        case fromString x of
+                            Just x2 ->
+                                Codec.succeed (toString x2)
 
-                    Nothing ->
-                        Codec.fail "Cannot decode password."
+                            Nothing ->
+                                Codec.fail "Cannot decode password."
+                    )
+                    identity
             )
-            toString
+        |> Codec.buildCustom

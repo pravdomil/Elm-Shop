@@ -23,14 +23,24 @@ toInt (Quantity a) =
 
 codec : Codec.Codec Quantity
 codec =
-    Codec.int
-        |> Codec.andThen
-            (\x ->
-                case fromInt x of
-                    Just x2 ->
-                        Codec.succeed x2
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                Quantity x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "Quantity"
+            Quantity
+            (Codec.int
+                |> Codec.andThen
+                    (\x ->
+                        case fromInt x of
+                            Just x2 ->
+                                Codec.succeed (toInt x2)
 
-                    Nothing ->
-                        Codec.fail "Cannot decode quantity."
+                            Nothing ->
+                                Codec.fail "Cannot decode quantity."
+                    )
+                    identity
             )
-            toInt
+        |> Codec.buildCustom

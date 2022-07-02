@@ -28,14 +28,24 @@ default =
 
 codec : Codec.Codec Name
 codec =
-    Codec.string
-        |> Codec.andThen
-            (\x ->
-                case fromString x of
-                    Just x2 ->
-                        Codec.succeed x2
+    Codec.custom
+        (\fn1 x ->
+            case x of
+                Name x1 ->
+                    fn1 x1
+        )
+        |> Codec.variant1 "Name"
+            Name
+            (Codec.string
+                |> Codec.andThen
+                    (\x ->
+                        case fromString x of
+                            Just x2 ->
+                                Codec.succeed (toString x2)
 
-                    Nothing ->
-                        Codec.fail "Cannot decode name."
+                            Nothing ->
+                                Codec.fail "Cannot decode name."
+                    )
+                    identity
             )
-            toString
+        |> Codec.buildCustom
