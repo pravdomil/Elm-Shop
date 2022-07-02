@@ -1,4 +1,4 @@
-module ElmShop.Document.Utils.Name exposing (Name, codec, default, fromString, schema, toString)
+module ElmShop.Document.Utils.Name exposing (Name, codec, default, fromString, toString)
 
 import Codec
 

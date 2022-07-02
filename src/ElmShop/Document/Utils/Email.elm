@@ -1,4 +1,4 @@
-module ElmShop.Document.Utils.Email exposing (Email, codec, fromString, schema, toString)
+module ElmShop.Document.Utils.Email exposing (Email, codec, fromString, toString)
 
 import Codec
 
