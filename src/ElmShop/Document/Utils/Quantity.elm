@@ -1,6 +1,8 @@
-module ElmShop.Document.Utils.Quantity exposing (Quantity, codec, fromInt, toInt)
+module ElmShop.Document.Utils.Quantity exposing (Quantity, codec, fromInt, schema, toInt)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 
 
 type Quantity
@@ -44,3 +46,11 @@ codec =
                     identity
             )
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Quantity
+schema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Quantity" ] "Quantity")
+        Nothing
+        [ Dataman.Schema.Variant "Quantity" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
+        ]

@@ -1,6 +1,7 @@
 module ElmShop.Document exposing (..)
 
 import Codec
+import Dataman.Schema
 import ElmShop.Document.Attribute
 import ElmShop.Document.Category
 import ElmShop.Document.Country
@@ -403,3 +404,29 @@ msgCodec =
         |> Codec.variant1 "Remove" Remove codec
         |> Codec.variant2 "AttachUserToSession" AttachUserToSession (Codec.maybe Id.codec) Id.codec
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Document
+schema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document" ] "Document")
+        Nothing
+        [ Dataman.Schema.Variant "Attribute" [ Dataman.Schema.toAny ElmShop.Document.Attribute.schema ]
+        , Dataman.Schema.Variant "Category" [ Dataman.Schema.toAny ElmShop.Document.Category.schema ]
+        , Dataman.Schema.Variant "Country" [ Dataman.Schema.toAny ElmShop.Document.Country.schema ]
+        , Dataman.Schema.Variant "Currency" [ Dataman.Schema.toAny ElmShop.Document.Currency.schema ]
+        , Dataman.Schema.Variant "File" [ Dataman.Schema.toAny ElmShop.Document.File.schema ]
+        , Dataman.Schema.Variant "Language" [ Dataman.Schema.toAny ElmShop.Document.Language.schema ]
+        , Dataman.Schema.Variant "Message" [ Dataman.Schema.toAny ElmShop.Document.Message.schema ]
+        , Dataman.Schema.Variant "Order" [ Dataman.Schema.toAny ElmShop.Document.Order.schema ]
+        , Dataman.Schema.Variant "OrderStatus" [ Dataman.Schema.toAny ElmShop.Document.OrderStatus.schema ]
+        , Dataman.Schema.Variant "Page" [ Dataman.Schema.toAny ElmShop.Document.Page.schema ]
+        , Dataman.Schema.Variant "Payment" [ Dataman.Schema.toAny ElmShop.Document.Payment.schema ]
+        , Dataman.Schema.Variant "Product" [ Dataman.Schema.toAny ElmShop.Document.Product.schema ]
+        , Dataman.Schema.Variant "Review" [ Dataman.Schema.toAny ElmShop.Document.Review.schema ]
+        , Dataman.Schema.Variant "Session" [ Dataman.Schema.toAny ElmShop.Document.Session.schema ]
+        , Dataman.Schema.Variant "Shipping" [ Dataman.Schema.toAny ElmShop.Document.Shipping.schema ]
+        , Dataman.Schema.Variant "Site" [ Dataman.Schema.toAny ElmShop.Document.Site.schema ]
+        , Dataman.Schema.Variant "Template" [ Dataman.Schema.toAny ElmShop.Document.Template.schema ]
+        , Dataman.Schema.Variant "User" [ Dataman.Schema.toAny ElmShop.Document.User.schema ]
+        , Dataman.Schema.Variant "Warehouse" [ Dataman.Schema.toAny ElmShop.Document.Warehouse.schema ]
+        ]

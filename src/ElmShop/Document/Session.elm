@@ -1,6 +1,8 @@
 module ElmShop.Document.Session exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import ElmShop.Document.Type
 import ElmShop.Document.Utils.Meta
 import Id
@@ -48,3 +50,14 @@ codec =
         |> Codec.field "user" .user (Codec.maybe Reference.codec)
         |> Codec.field "order" .order (Codec.maybe Reference.codec)
         |> Codec.buildObject
+
+
+schema : Dataman.Schema.Schema Session
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Session" ] "Session"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.sessionSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "user" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.userSchema)))
+        , Dataman.Schema.RecordField "order" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.orderSchema)))
+        ]

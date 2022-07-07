@@ -1,6 +1,8 @@
 module ElmShop.Document.Order exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -330,3 +332,138 @@ numberCodec =
         )
         |> Codec.variant1 "Number" Number Codec.int
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Order
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Order"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.orderSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "number" (Dataman.Schema.toAny numberSchema)
+        , Dataman.Schema.RecordField "client" (Dataman.Schema.toAny clientSchema)
+        , Dataman.Schema.RecordField "billing" (Dataman.Schema.toAny billingSchema)
+        , Dataman.Schema.RecordField "site" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.siteSchema))
+        , Dataman.Schema.RecordField "language" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema))
+        , Dataman.Schema.RecordField "currency" (Dataman.Schema.toAny currencySchema)
+        , Dataman.Schema.RecordField "cart" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.id cartItemSchema) cartItemSchema))
+        , Dataman.Schema.RecordField "shipping" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.id shippingSchema) shippingSchema))
+        , Dataman.Schema.RecordField "payments" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.id paymentSchema) paymentSchema))
+        , Dataman.Schema.RecordField "messages" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.id messageSchema) messageSchema))
+        ]
+
+
+numberSchema : Dataman.Schema.Schema Number
+numberSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Number")
+        Nothing
+        [ Dataman.Schema.Variant "Number" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
+        ]
+
+
+clientSchema : Dataman.Schema.Schema Client
+clientSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Client"))
+        Nothing
+        [ Dataman.Schema.RecordField "email" (Dataman.Schema.toAny ElmShop.Document.Utils.Email.schema)
+        , Dataman.Schema.RecordField "phone" (Dataman.Schema.toAny ElmShop.Document.Utils.Phone.schema)
+        , Dataman.Schema.RecordField "timeZone" (Dataman.Schema.toAny ElmShop.Document.Utils.TimeZone.schema)
+        , Dataman.Schema.RecordField "note" (Dataman.Schema.toAny clientNoteSchema)
+        ]
+
+
+clientNoteSchema : Dataman.Schema.Schema ClientNote
+clientNoteSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "ClientNote")
+        Nothing
+        [ Dataman.Schema.Variant "ClientNote" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]
+
+
+billingSchema : Dataman.Schema.Schema Billing
+billingSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Billing"))
+        Nothing
+        [ Dataman.Schema.RecordField "address" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Address.schema))
+        , Dataman.Schema.RecordField "note" (Dataman.Schema.toAny billingNoteSchema)
+        ]
+
+
+billingNoteSchema : Dataman.Schema.Schema BillingNote
+billingNoteSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "BillingNote")
+        Nothing
+        [ Dataman.Schema.Variant "BillingNote" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]
+
+
+currencySchema : Dataman.Schema.Schema Currency
+currencySchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Currency"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.currencySchema))
+        , Dataman.Schema.RecordField "value" (Dataman.Schema.toAny ElmShop.Document.Utils.Money.schema)
+        ]
+
+
+cartItemSchema : Dataman.Schema.Schema CartItem
+cartItemSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "CartItem"))
+        Nothing
+        [ Dataman.Schema.RecordField "created" (Dataman.Schema.toAny Dataman.Schema.Basics.time)
+        , Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "price" (Dataman.Schema.toAny ElmShop.Document.Utils.Money.schema)
+        , Dataman.Schema.RecordField "quantity" (Dataman.Schema.toAny ElmShop.Document.Utils.Quantity.schema)
+        , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny cartItemTypeSchema)
+        ]
+
+
+cartItemTypeSchema : Dataman.Schema.Schema CartItemType
+cartItemTypeSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "CartItemType")
+        Nothing
+        [ Dataman.Schema.Variant "ProductCartItem" [ Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema), Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema)) ]
+        ]
+
+
+shippingSchema : Dataman.Schema.Schema Shipping
+shippingSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Shipping"))
+        Nothing
+        [ Dataman.Schema.RecordField "created" (Dataman.Schema.toAny Dataman.Schema.Basics.time)
+        , Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "price" (Dataman.Schema.toAny ElmShop.Document.Utils.Money.schema)
+        , Dataman.Schema.RecordField "address" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Address.schema))
+        , Dataman.Schema.RecordField "shipping" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.shippingSchema))
+        ]
+
+
+paymentSchema : Dataman.Schema.Schema Payment
+paymentSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Payment"))
+        Nothing
+        [ Dataman.Schema.RecordField "created" (Dataman.Schema.toAny Dataman.Schema.Basics.time)
+        , Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "price" (Dataman.Schema.toAny ElmShop.Document.Utils.Money.schema)
+        , Dataman.Schema.RecordField "payment" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.paymentSchema))
+        ]
+
+
+messageSchema : Dataman.Schema.Schema Message
+messageSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Message"))
+        Nothing
+        [ Dataman.Schema.RecordField "created" (Dataman.Schema.toAny Dataman.Schema.Basics.time)
+        , Dataman.Schema.RecordField "status" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.orderStatusSchema)))
+        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
+        , Dataman.Schema.RecordField "notification" (Dataman.Schema.toAny messageNotificationSchema)
+        ]
+
+
+messageNotificationSchema : Dataman.Schema.Schema MessageNotification
+messageNotificationSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "MessageNotification")
+        Nothing
+        [ Dataman.Schema.Variant "NoNotification" []
+        , Dataman.Schema.Variant "NotifyClient" []
+        ]

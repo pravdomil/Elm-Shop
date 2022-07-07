@@ -1,6 +1,8 @@
-module ElmShop.Document.Utils.TimeZone exposing (TimeZone, codec, create, fromInt, toInt)
+module ElmShop.Document.Utils.TimeZone exposing (TimeZone, codec, create, fromInt, schema, toInt)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Task
 import Time
 
@@ -39,3 +41,11 @@ codec =
         )
         |> Codec.variant1 "TimeZone" TimeZone Codec.int
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema TimeZone
+schema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "TimeZone" ] "TimeZone")
+        Nothing
+        [ Dataman.Schema.Variant "TimeZone" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
+        ]

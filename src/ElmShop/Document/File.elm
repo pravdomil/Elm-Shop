@@ -1,6 +1,8 @@
 module ElmShop.Document.File exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -70,3 +72,31 @@ translationCodec =
     Codec.object (\x1 -> { name = x1 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.buildObject
+
+
+schema : Dataman.Schema.Schema File
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "File" ] "File"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.fileSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
+        , Dataman.Schema.RecordField "url" (Dataman.Schema.toAny urlSchema)
+        ]
+
+
+translationSchema : Dataman.Schema.Schema Translation
+translationSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "File" ] "Translation"))
+        Nothing
+        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        ]
+
+
+urlSchema : Dataman.Schema.Schema Url
+urlSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "File" ] "Url")
+        Nothing
+        [ Dataman.Schema.Variant "Url" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]

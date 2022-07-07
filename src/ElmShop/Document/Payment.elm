@@ -1,6 +1,8 @@
 module ElmShop.Document.Payment exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -136,3 +138,60 @@ translationCodec =
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
         |> Codec.buildObject
+
+
+schema : Dataman.Schema.Schema Payment
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Payment"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.paymentSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
+        , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
+        ]
+
+
+translationSchema : Dataman.Schema.Schema Translation
+translationSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Translation"))
+        Nothing
+        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
+        ]
+
+
+typeSchema : Dataman.Schema.Schema Type
+typeSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Type")
+        Nothing
+        [ Dataman.Schema.Variant "BankTransfer_" [ Dataman.Schema.toAny bankTransferSchema ]
+        , Dataman.Schema.Variant "PayPal_" [ Dataman.Schema.toAny payPalSchema ]
+        , Dataman.Schema.Variant "Comgate_" [ Dataman.Schema.toAny comgateSchema ]
+        ]
+
+
+bankTransferSchema : Dataman.Schema.Schema BankTransfer
+bankTransferSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "BankTransfer"))
+        Nothing
+        [ Dataman.Schema.RecordField "orderStatus" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.orderStatusSchema))
+        ]
+
+
+payPalSchema : Dataman.Schema.Schema PayPal
+payPalSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "PayPal"))
+        Nothing
+        [ Dataman.Schema.RecordField "email" (Dataman.Schema.toAny ElmShop.Document.Utils.Email.schema)
+        , Dataman.Schema.RecordField "test" (Dataman.Schema.toAny Dataman.Schema.Basics.bool)
+        ]
+
+
+comgateSchema : Dataman.Schema.Schema Comgate
+comgateSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Comgate"))
+        Nothing
+        [ Dataman.Schema.RecordField "merchantId" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
+        , Dataman.Schema.RecordField "secret" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
+        , Dataman.Schema.RecordField "test" (Dataman.Schema.toAny Dataman.Schema.Basics.bool)
+        ]

@@ -1,6 +1,8 @@
 module ElmShop.Document.Product exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -270,3 +272,127 @@ typeCodec =
         |> Codec.variant1 "Variable_" Variable_ variableCodec
         |> Codec.variant1 "Set_" Set_ setCodec
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Product
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Product"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.productSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
+        , Dataman.Schema.RecordField "sale" (Dataman.Schema.toAny saleSchema)
+        , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
+        , Dataman.Schema.RecordField "sku" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe skuSchema))
+        , Dataman.Schema.RecordField "stock"
+            (Dataman.Schema.toAny
+                (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.warehouseSchema)
+                    (Dataman.Schema.Record Nothing
+                        Nothing
+                        [ Dataman.Schema.RecordField "quantity" (Dataman.Schema.toAny stockQuantitySchema)
+                        ]
+                    )
+                )
+            )
+        , Dataman.Schema.RecordField "reservations" (Dataman.Schema.toAny reservationsSchema)
+        , Dataman.Schema.RecordField "image" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.fileSchema)))
+        , Dataman.Schema.RecordField "gallery"
+            (Dataman.Schema.toAny
+                (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.fileSchema)
+                    (Dataman.Schema.Record Nothing
+                        Nothing
+                        [ Dataman.Schema.RecordField "order" (Dataman.Schema.toAny ElmShop.Document.Utils.Order.schema)
+                        ]
+                    )
+                )
+            )
+        , Dataman.Schema.RecordField "attributes" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.attributeSchema) ElmShop.Document.Utils.AttributeValue.schema))
+        , Dataman.Schema.RecordField "related" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema) (Dataman.Schema.Tuple Nothing Nothing [])))
+        , Dataman.Schema.RecordField "categories" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.categorySchema) (Dataman.Schema.Tuple Nothing Nothing [])))
+        ]
+
+
+typeSchema : Dataman.Schema.Schema Type
+typeSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Type")
+        Nothing
+        [ Dataman.Schema.Variant "Single_" [ Dataman.Schema.toAny singleSchema ]
+        , Dataman.Schema.Variant "Variable_" [ Dataman.Schema.toAny variableSchema ]
+        , Dataman.Schema.Variant "Set_" [ Dataman.Schema.toAny setSchema ]
+        ]
+
+
+singleSchema : Dataman.Schema.Schema Single
+singleSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Single"))
+        Nothing
+        [ Dataman.Schema.RecordField "price" (Dataman.Schema.toAny ElmShop.Document.Utils.Money.schema)
+        ]
+
+
+variableSchema : Dataman.Schema.Schema Variable
+variableSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Variable"))
+        Nothing
+        [ Dataman.Schema.RecordField "products" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema) (Dataman.Schema.Tuple Nothing Nothing [])))
+        ]
+
+
+setSchema : Dataman.Schema.Schema Set
+setSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Set"))
+        Nothing
+        [ Dataman.Schema.RecordField "products"
+            (Dataman.Schema.toAny
+                (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema)
+                    (Dataman.Schema.Record Nothing
+                        Nothing
+                        [ Dataman.Schema.RecordField "quantity" (Dataman.Schema.toAny ElmShop.Document.Utils.Quantity.schema)
+                        ]
+                    )
+                )
+            )
+        , Dataman.Schema.RecordField "price" (Dataman.Schema.toAny ElmShop.Document.Utils.Money.schema)
+        ]
+
+
+saleSchema : Dataman.Schema.Schema Sale
+saleSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Sale")
+        Nothing
+        [ Dataman.Schema.Variant "ForSale" []
+        , Dataman.Schema.Variant "NotForSale" []
+        ]
+
+
+translationSchema : Dataman.Schema.Schema Translation
+translationSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Translation"))
+        Nothing
+        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
+        ]
+
+
+skuSchema : Dataman.Schema.Schema Sku
+skuSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Sku")
+        Nothing
+        [ Dataman.Schema.Variant "Sku" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]
+
+
+stockQuantitySchema : Dataman.Schema.Schema StockQuantity
+stockQuantitySchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "StockQuantity")
+        Nothing
+        [ Dataman.Schema.Variant "StockQuantity" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
+        ]
+
+
+reservationsSchema : Dataman.Schema.Schema Reservations
+reservationsSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Reservations")
+        Nothing
+        [ Dataman.Schema.Variant "Reservations" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
+        ]

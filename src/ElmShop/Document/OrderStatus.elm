@@ -1,6 +1,8 @@
 module ElmShop.Document.OrderStatus exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -81,3 +83,33 @@ translationCodec =
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
         |> Codec.buildObject
+
+
+schema : Dataman.Schema.Schema OrderStatus
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "OrderStatus" ] "OrderStatus"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.orderStatusSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
+        , Dataman.Schema.RecordField "stock" (Dataman.Schema.toAny stockSchema)
+        ]
+
+
+translationSchema : Dataman.Schema.Schema Translation
+translationSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "OrderStatus" ] "Translation"))
+        Nothing
+        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
+        ]
+
+
+stockSchema : Dataman.Schema.Schema Stock
+stockSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "OrderStatus" ] "Stock")
+        Nothing
+        [ Dataman.Schema.Variant "NoChange" []
+        , Dataman.Schema.Variant "Reserve" []
+        , Dataman.Schema.Variant "Subtract" []
+        ]

@@ -1,6 +1,8 @@
 module ElmShop.Document.Shipping exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -97,3 +99,42 @@ translationCodec =
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
         |> Codec.buildObject
+
+
+schema : Dataman.Schema.Schema Shipping
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Shipping"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.shippingSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
+        , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
+        ]
+
+
+translationSchema : Dataman.Schema.Schema Translation
+translationSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Translation"))
+        Nothing
+        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
+        ]
+
+
+typeSchema : Dataman.Schema.Schema Type
+typeSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Type")
+        Nothing
+        [ Dataman.Schema.Variant "Basic_" [ Dataman.Schema.toAny basicSchema ]
+        ]
+
+
+basicSchema : Dataman.Schema.Schema Basic
+basicSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Basic"))
+        Nothing
+        [ Dataman.Schema.RecordField "price" (Dataman.Schema.toAny ElmShop.Document.Utils.Money.schema)
+        , Dataman.Schema.RecordField "minTotal" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Money.schema))
+        , Dataman.Schema.RecordField "maxTotal" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Money.schema))
+        , Dataman.Schema.RecordField "filter" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.CountryFilter.schema))
+        ]

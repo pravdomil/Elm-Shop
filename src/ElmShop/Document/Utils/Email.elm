@@ -1,6 +1,8 @@
-module ElmShop.Document.Utils.Email exposing (Email, codec, fromString, toString)
+module ElmShop.Document.Utils.Email exposing (Email, codec, fromString, schema, toString)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 
 
 type Email
@@ -44,3 +46,11 @@ codec =
                     identity
             )
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Email
+schema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Email" ] "Email")
+        Nothing
+        [ Dataman.Schema.Variant "Email" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]

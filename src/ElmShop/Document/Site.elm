@@ -1,6 +1,8 @@
 module ElmShop.Document.Site exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -141,3 +143,68 @@ urlCodec =
         )
         |> Codec.variant1 "Url" Url Codec.string
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Site
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Site"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.siteSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "url" (Dataman.Schema.toAny urlSchema)
+        , Dataman.Schema.RecordField "description" (Dataman.Schema.toAny descriptionSchema)
+        , Dataman.Schema.RecordField "contact" (Dataman.Schema.toAny contactSchema)
+        , Dataman.Schema.RecordField "language" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema))
+        , Dataman.Schema.RecordField "homePage" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.pageSchema))
+        , Dataman.Schema.RecordField "currency" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.currencySchema))
+        , Dataman.Schema.RecordField "logo" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.fileSchema)))
+        , Dataman.Schema.RecordField "icon" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.fileSchema)))
+        , Dataman.Schema.RecordField "header"
+            (Dataman.Schema.toAny
+                (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.pageSchema)
+                    (Dataman.Schema.Record Nothing
+                        Nothing
+                        [ Dataman.Schema.RecordField "order" (Dataman.Schema.toAny ElmShop.Document.Utils.Order.schema)
+                        ]
+                    )
+                )
+            )
+        , Dataman.Schema.RecordField "footer"
+            (Dataman.Schema.toAny
+                (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.pageSchema)
+                    (Dataman.Schema.Record Nothing
+                        Nothing
+                        [ Dataman.Schema.RecordField "order" (Dataman.Schema.toAny ElmShop.Document.Utils.Order.schema)
+                        ]
+                    )
+                )
+            )
+        ]
+
+
+urlSchema : Dataman.Schema.Schema Url
+urlSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Url")
+        Nothing
+        [ Dataman.Schema.Variant "Url" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]
+
+
+descriptionSchema : Dataman.Schema.Schema Description
+descriptionSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Description")
+        Nothing
+        [ Dataman.Schema.Variant "Description" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]
+
+
+contactSchema : Dataman.Schema.Schema Contact
+contactSchema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Contact"))
+        Nothing
+        [ Dataman.Schema.RecordField "email" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Email.schema))
+        , Dataman.Schema.RecordField "phone" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Phone.schema))
+        , Dataman.Schema.RecordField "note" (Dataman.Schema.toAny ElmShop.Document.Utils.Note.schema)
+        , Dataman.Schema.RecordField "address" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Address.schema))
+        ]

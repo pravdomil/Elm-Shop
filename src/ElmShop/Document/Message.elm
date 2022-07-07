@@ -1,6 +1,8 @@
 module ElmShop.Document.Message exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import ElmShop.Document.Type
 import ElmShop.Document.Utils.Meta
 import Id
@@ -81,3 +83,33 @@ typeCodec =
         |> Codec.variant0 "Warning" Warning
         |> Codec.variant0 "Error" Error
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Message
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Message" ] "Message"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.messageSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
+        , Dataman.Schema.RecordField "message" (Dataman.Schema.toAny contentSchema)
+        , Dataman.Schema.RecordField "related" (Dataman.Schema.toAny (Dataman.Schema.Basics.list (Dataman.Schema.Basics.reference (Dataman.Schema.Tuple Nothing Nothing []))))
+        ]
+
+
+typeSchema : Dataman.Schema.Schema Type
+typeSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Message" ] "Type")
+        Nothing
+        [ Dataman.Schema.Variant "Info" []
+        , Dataman.Schema.Variant "Warning" []
+        , Dataman.Schema.Variant "Error" []
+        ]
+
+
+contentSchema : Dataman.Schema.Schema Content
+contentSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Message" ] "Content")
+        Nothing
+        [ Dataman.Schema.Variant "Content" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]

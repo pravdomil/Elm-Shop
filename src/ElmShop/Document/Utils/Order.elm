@@ -1,6 +1,8 @@
-module ElmShop.Document.Utils.Order exposing (Order, codec, default, fromFloat, toFloat)
+module ElmShop.Document.Utils.Order exposing (Order, codec, default, fromFloat, schema, toFloat)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 
 
 type Order
@@ -32,3 +34,11 @@ codec =
         )
         |> Codec.variant1 "Order" Order Codec.float
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Order
+schema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Order" ] "Order")
+        Nothing
+        [ Dataman.Schema.Variant "Order" [ Dataman.Schema.toAny Dataman.Schema.Basics.float ]
+        ]

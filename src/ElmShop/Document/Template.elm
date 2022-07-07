@@ -1,6 +1,8 @@
 module ElmShop.Document.Template exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -71,3 +73,39 @@ contentCodec =
                 )
             )
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Template
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Template" ] "Template"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.templateSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny contentSchema)
+        ]
+
+
+contentSchema : Dataman.Schema.Schema Content
+contentSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Template" ] "Content")
+        Nothing
+        [ Dataman.Schema.Variant "Universal"
+            [ Dataman.Schema.toAny
+                (Dataman.Schema.Record Nothing
+                    Nothing
+                    [ Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
+                    ]
+                )
+            ]
+        , Dataman.Schema.Variant "Localized"
+            [ Dataman.Schema.toAny
+                (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema)
+                    (Dataman.Schema.Record Nothing
+                        Nothing
+                        [ Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
+                        ]
+                    )
+                )
+            ]
+        ]

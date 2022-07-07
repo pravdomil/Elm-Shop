@@ -1,6 +1,8 @@
-module ElmShop.Document.Utils.Note exposing (Note, codec, fromString, toString)
+module ElmShop.Document.Utils.Note exposing (Note, codec, fromString, schema, toString)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 
 
 type Note
@@ -27,3 +29,11 @@ codec =
         )
         |> Codec.variant1 "Note" Note Codec.string
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Note
+schema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Note" ] "Note")
+        Nothing
+        [ Dataman.Schema.Variant "Note" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]

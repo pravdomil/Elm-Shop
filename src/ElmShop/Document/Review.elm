@@ -1,6 +1,8 @@
 module ElmShop.Document.Review exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import ElmShop.Document.Type
 import ElmShop.Document.Utils.Meta
 import ElmShop.Document.Utils.Text
@@ -54,3 +56,24 @@ ratingCodec =
         )
         |> Codec.variant1 "Rating" Rating Codec.int
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Review
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Review" ] "Review"))
+        Nothing
+        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.reviewSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
+        , Dataman.Schema.RecordField "order" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.orderSchema))
+        , Dataman.Schema.RecordField "product" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema))
+        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Text.schema)
+        , Dataman.Schema.RecordField "rating" (Dataman.Schema.toAny ratingSchema)
+        ]
+
+
+ratingSchema : Dataman.Schema.Schema Rating
+ratingSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Review" ] "Rating")
+        Nothing
+        [ Dataman.Schema.Variant "Rating" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
+        ]

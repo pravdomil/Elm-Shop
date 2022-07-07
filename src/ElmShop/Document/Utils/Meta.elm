@@ -1,6 +1,8 @@
 module ElmShop.Document.Utils.Meta exposing (..)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import ElmShop.Document.Utils.Note
 import ElmShop.Document.Utils.Order
 import Task
@@ -119,3 +121,41 @@ statusCodec =
         |> Codec.variant1 "Published" Published Time.Codec.posix
         |> Codec.variant1 "Trashed" Trashed Time.Codec.posix
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Meta
+schema =
+    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Meta" ] "Meta"))
+        Nothing
+        [ Dataman.Schema.RecordField "status" (Dataman.Schema.toAny statusSchema)
+        , Dataman.Schema.RecordField "created" (Dataman.Schema.toAny timeCreatedSchema)
+        , Dataman.Schema.RecordField "modified" (Dataman.Schema.toAny timeModifiedSchema)
+        , Dataman.Schema.RecordField "order" (Dataman.Schema.toAny ElmShop.Document.Utils.Order.schema)
+        , Dataman.Schema.RecordField "note" (Dataman.Schema.toAny ElmShop.Document.Utils.Note.schema)
+        ]
+
+
+statusSchema : Dataman.Schema.Schema Status
+statusSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Meta" ] "Status")
+        Nothing
+        [ Dataman.Schema.Variant "Draft" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ]
+        , Dataman.Schema.Variant "Published" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ]
+        , Dataman.Schema.Variant "Trashed" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ]
+        ]
+
+
+timeCreatedSchema : Dataman.Schema.Schema TimeCreated
+timeCreatedSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Meta" ] "TimeCreated")
+        Nothing
+        [ Dataman.Schema.Variant "TimeCreated" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ]
+        ]
+
+
+timeModifiedSchema : Dataman.Schema.Schema TimeModified
+timeModifiedSchema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Meta" ] "TimeModified")
+        Nothing
+        [ Dataman.Schema.Variant "TimeModified" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ]
+        ]

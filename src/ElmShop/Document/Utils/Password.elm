@@ -1,6 +1,8 @@
-module ElmShop.Document.Utils.Password exposing (Password, codec, create, fromString, toString)
+module ElmShop.Document.Utils.Password exposing (Password, codec, create, fromString, schema, toString)
 
 import Codec
+import Dataman.Schema
+import Dataman.Schema.Basics
 import Id
 import Id.Random
 import Task
@@ -53,3 +55,11 @@ codec =
                     identity
             )
         |> Codec.buildCustom
+
+
+schema : Dataman.Schema.Schema Password
+schema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Password" ] "Password")
+        Nothing
+        [ Dataman.Schema.Variant "Password" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
+        ]
