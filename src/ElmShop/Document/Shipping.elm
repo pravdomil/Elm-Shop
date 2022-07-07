@@ -1,6 +1,7 @@
 module ElmShop.Document.Shipping exposing (..)
 
 import Codec
+import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -75,9 +76,9 @@ basicCodec : Codec.Codec Basic
 basicCodec =
     Codec.object (\x1 x2 x3 x4 -> { price = x1, minTotal = x2, maxTotal = x3, filter = x4 })
         |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
-        |> Codec.field "minTotal" .minTotal (Codec.maybe ElmShop.Document.Utils.Money.codec)
-        |> Codec.field "maxTotal" .maxTotal (Codec.maybe ElmShop.Document.Utils.Money.codec)
-        |> Codec.field "filter" .filter (Codec.maybe ElmShop.Document.Utils.CountryFilter.codec)
+        |> Codec.field "minTotal" .minTotal (Codec.Extra.maybe ElmShop.Document.Utils.Money.codec)
+        |> Codec.field "maxTotal" .maxTotal (Codec.Extra.maybe ElmShop.Document.Utils.Money.codec)
+        |> Codec.field "filter" .filter (Codec.Extra.maybe ElmShop.Document.Utils.CountryFilter.codec)
         |> Codec.buildObject
 
 

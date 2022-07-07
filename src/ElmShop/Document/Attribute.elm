@@ -1,6 +1,7 @@
 module ElmShop.Document.Attribute exposing (..)
 
 import Codec
+import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -42,8 +43,8 @@ codec =
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "parent" .parent (Codec.maybe Reference.codec)
-        |> Codec.field "image" .image (Codec.maybe Reference.codec)
+        |> Codec.field "parent" .parent (Codec.Extra.maybe Reference.codec)
+        |> Codec.field "image" .image (Codec.Extra.maybe Reference.codec)
         |> Codec.buildObject
 
 

@@ -1,6 +1,7 @@
 module ElmShop.Document.Product exposing (..)
 
 import Codec
+import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -137,7 +138,7 @@ codec =
         |> Codec.field "type_" .type_ typeCodec
         |> Codec.field "sale" .sale saleCodec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "sku" .sku (Codec.maybe skuCodec)
+        |> Codec.field "sku" .sku (Codec.Extra.maybe skuCodec)
         |> Codec.field "stock"
             .stock
             (Dict.Any.Codec.dict Reference.toString
@@ -148,7 +149,7 @@ codec =
                 )
             )
         |> Codec.field "reservations" .reservations reservationsCodec
-        |> Codec.field "image" .image (Codec.maybe Reference.codec)
+        |> Codec.field "image" .image (Codec.Extra.maybe Reference.codec)
         |> Codec.field "gallery"
             .gallery
             (Dict.Any.Codec.dict Reference.toString

@@ -1,6 +1,7 @@
 module ElmShop.Document.Currency exposing (..)
 
 import Codec
+import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -72,7 +73,7 @@ codec =
         |> Codec.field "code" .code codeCodec
         |> Codec.field "value" .value ElmShop.Document.Utils.Money.codec
         |> Codec.field "decimalPlaces" .decimalPlaces ElmShop.Document.Utils.Money.decimalPlacesCodec
-        |> Codec.field "rounding" .rounding (Codec.maybe roundingCodec)
+        |> Codec.field "rounding" .rounding (Codec.Extra.maybe roundingCodec)
         |> Codec.field "symbolLeft" .symbolLeft Codec.string
         |> Codec.field "symbolRight" .symbolRight Codec.string
         |> Codec.buildObject

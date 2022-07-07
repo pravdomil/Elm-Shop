@@ -1,6 +1,7 @@
 module ElmShop.Document.Order exposing (..)
 
 import Codec
+import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -206,7 +207,7 @@ messageCodec : Codec.Codec Message
 messageCodec =
     Codec.object (\x1 x2 x3 x4 -> { created = x1, status = x2, content = x3, notification = x4 })
         |> Codec.field "created" .created Time.Codec.posix
-        |> Codec.field "status" .status (Codec.maybe Reference.codec)
+        |> Codec.field "status" .status (Codec.Extra.maybe Reference.codec)
         |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
         |> Codec.field "notification" .notification messageNotificationCodec
         |> Codec.buildObject
@@ -244,7 +245,7 @@ shippingCodec =
         |> Codec.field "created" .created Time.Codec.posix
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
-        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
+        |> Codec.field "address" .address (Codec.Extra.maybe ElmShop.Document.Utils.Address.codec)
         |> Codec.field "shipping" .shipping Reference.codec
         |> Codec.buildObject
 
@@ -268,7 +269,7 @@ cartItemTypeCodec =
                 ProductCartItem x1 x2 ->
                     fn1 x1 x2
         )
-        |> Codec.variant2 "ProductCartItem" ProductCartItem Reference.codec (Codec.maybe Reference.codec)
+        |> Codec.variant2 "ProductCartItem" ProductCartItem Reference.codec (Codec.Extra.maybe Reference.codec)
         |> Codec.buildCustom
 
 
@@ -283,7 +284,7 @@ currencyCodec =
 billingCodec : Codec.Codec Billing
 billingCodec =
     Codec.object (\x1 x2 -> { address = x1, note = x2 })
-        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
+        |> Codec.field "address" .address (Codec.Extra.maybe ElmShop.Document.Utils.Address.codec)
         |> Codec.field "note" .note billingNoteCodec
         |> Codec.buildObject
 

@@ -1,6 +1,7 @@
 module ElmShop.Document exposing (..)
 
 import Codec
+import Codec.Extra
 import Dataman.Schema
 import ElmShop.Document.Attribute
 import ElmShop.Document.Category
@@ -402,7 +403,7 @@ msgCodec =
         )
         |> Codec.variant1 "Create" Create codec
         |> Codec.variant1 "Remove" Remove codec
-        |> Codec.variant2 "AttachUserToSession" AttachUserToSession (Codec.maybe Id.codec) Id.codec
+        |> Codec.variant2 "AttachUserToSession" AttachUserToSession (Codec.Extra.maybe Id.codec) Id.codec
         |> Codec.buildCustom
 
 

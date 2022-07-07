@@ -1,6 +1,7 @@
 module ElmShop.Document.Site exposing (..)
 
 import Codec
+import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -88,8 +89,8 @@ codec =
         |> Codec.field "language" .language Reference.codec
         |> Codec.field "homePage" .homePage Reference.codec
         |> Codec.field "currency" .currency Reference.codec
-        |> Codec.field "logo" .logo (Codec.maybe Reference.codec)
-        |> Codec.field "icon" .icon (Codec.maybe Reference.codec)
+        |> Codec.field "logo" .logo (Codec.Extra.maybe Reference.codec)
+        |> Codec.field "icon" .icon (Codec.Extra.maybe Reference.codec)
         |> Codec.field "header"
             .header
             (Dict.Any.Codec.dict Reference.toString
@@ -114,10 +115,10 @@ codec =
 contactCodec : Codec.Codec Contact
 contactCodec =
     Codec.object (\x1 x2 x3 x4 -> { email = x1, phone = x2, note = x3, address = x4 })
-        |> Codec.field "email" .email (Codec.maybe ElmShop.Document.Utils.Email.codec)
-        |> Codec.field "phone" .phone (Codec.maybe ElmShop.Document.Utils.Phone.codec)
+        |> Codec.field "email" .email (Codec.Extra.maybe ElmShop.Document.Utils.Email.codec)
+        |> Codec.field "phone" .phone (Codec.Extra.maybe ElmShop.Document.Utils.Phone.codec)
         |> Codec.field "note" .note ElmShop.Document.Utils.Note.codec
-        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
+        |> Codec.field "address" .address (Codec.Extra.maybe ElmShop.Document.Utils.Address.codec)
         |> Codec.buildObject
 
 

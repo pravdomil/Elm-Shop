@@ -1,6 +1,7 @@
 module ElmShop.Document.Country exposing (..)
 
 import Codec
+import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -56,8 +57,8 @@ codec =
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.field "code" .code codeCodec
-        |> Codec.field "currency" .currency (Codec.maybe Reference.codec)
-        |> Codec.field "parent" .parent (Codec.maybe Reference.codec)
+        |> Codec.field "currency" .currency (Codec.Extra.maybe Reference.codec)
+        |> Codec.field "parent" .parent (Codec.Extra.maybe Reference.codec)
         |> Codec.buildObject
 
 
