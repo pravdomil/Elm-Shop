@@ -52,5 +52,5 @@ schema : Dataman.Schema.Schema Quantity
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Quantity" ] "Quantity")
         Nothing
-        [ Dataman.Schema.Variant "Quantity" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
-        ]
+        (Dataman.Schema.Variant "Quantity" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
+        []

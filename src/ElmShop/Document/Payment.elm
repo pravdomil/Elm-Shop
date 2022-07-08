@@ -164,8 +164,8 @@ typeSchema : Dataman.Schema.Schema Type
 typeSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Type")
         Nothing
-        [ Dataman.Schema.Variant "BankTransfer_" [ Dataman.Schema.toAny bankTransferSchema ]
-        , Dataman.Schema.Variant "PayPal_" [ Dataman.Schema.toAny payPalSchema ]
+        (Dataman.Schema.Variant "BankTransfer_" [ Dataman.Schema.toAny bankTransferSchema ])
+        [ Dataman.Schema.Variant "PayPal_" [ Dataman.Schema.toAny payPalSchema ]
         , Dataman.Schema.Variant "Comgate_" [ Dataman.Schema.toAny comgateSchema ]
         ]
 

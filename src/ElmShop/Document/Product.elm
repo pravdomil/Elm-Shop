@@ -317,8 +317,8 @@ typeSchema : Dataman.Schema.Schema Type
 typeSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Type")
         Nothing
-        [ Dataman.Schema.Variant "Single_" [ Dataman.Schema.toAny singleSchema ]
-        , Dataman.Schema.Variant "Variable_" [ Dataman.Schema.toAny variableSchema ]
+        (Dataman.Schema.Variant "Single_" [ Dataman.Schema.toAny singleSchema ])
+        [ Dataman.Schema.Variant "Variable_" [ Dataman.Schema.toAny variableSchema ]
         , Dataman.Schema.Variant "Set_" [ Dataman.Schema.toAny setSchema ]
         ]
 
@@ -361,8 +361,8 @@ saleSchema : Dataman.Schema.Schema Sale
 saleSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Sale")
         Nothing
-        [ Dataman.Schema.Variant "ForSale" []
-        , Dataman.Schema.Variant "NotForSale" []
+        (Dataman.Schema.Variant "ForSale" [])
+        [ Dataman.Schema.Variant "NotForSale" []
         ]
 
 
@@ -379,21 +379,21 @@ skuSchema : Dataman.Schema.Schema Sku
 skuSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Sku")
         Nothing
-        [ Dataman.Schema.Variant "Sku" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Sku" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []
 
 
 stockQuantitySchema : Dataman.Schema.Schema StockQuantity
 stockQuantitySchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "StockQuantity")
         Nothing
-        [ Dataman.Schema.Variant "StockQuantity" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
-        ]
+        (Dataman.Schema.Variant "StockQuantity" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
+        []
 
 
 reservationsSchema : Dataman.Schema.Schema Reservations
 reservationsSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Reservations")
         Nothing
-        [ Dataman.Schema.Variant "Reservations" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
-        ]
+        (Dataman.Schema.Variant "Reservations" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
+        []

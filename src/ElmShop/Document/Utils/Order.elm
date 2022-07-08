@@ -40,5 +40,5 @@ schema : Dataman.Schema.Schema Order
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Order" ] "Order")
         Nothing
-        [ Dataman.Schema.Variant "Order" [ Dataman.Schema.toAny Dataman.Schema.Basics.float ]
-        ]
+        (Dataman.Schema.Variant "Order" [ Dataman.Schema.toAny Dataman.Schema.Basics.float ])
+        []

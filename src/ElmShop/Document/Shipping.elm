@@ -126,8 +126,8 @@ typeSchema : Dataman.Schema.Schema Type
 typeSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Type")
         Nothing
-        [ Dataman.Schema.Variant "Basic_" [ Dataman.Schema.toAny basicSchema ]
-        ]
+        (Dataman.Schema.Variant "Basic_" [ Dataman.Schema.toAny basicSchema ])
+        []
 
 
 basicSchema : Dataman.Schema.Schema Basic

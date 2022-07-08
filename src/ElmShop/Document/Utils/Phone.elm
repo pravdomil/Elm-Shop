@@ -52,5 +52,5 @@ schema : Dataman.Schema.Schema Phone
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Phone" ] "Phone")
         Nothing
-        [ Dataman.Schema.Variant "Phone" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Phone" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []

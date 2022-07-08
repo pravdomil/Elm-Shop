@@ -47,5 +47,5 @@ schema : Dataman.Schema.Schema TimeZone
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "TimeZone" ] "TimeZone")
         Nothing
-        [ Dataman.Schema.Variant "TimeZone" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
-        ]
+        (Dataman.Schema.Variant "TimeZone" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
+        []

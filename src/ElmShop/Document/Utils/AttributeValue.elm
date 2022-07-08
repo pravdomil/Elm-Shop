@@ -42,7 +42,7 @@ schema : Dataman.Schema.Schema AttributeValue
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "AttributeValue" ] "AttributeValue")
         Nothing
-        [ Dataman.Schema.Variant "StringValue"
+        (Dataman.Schema.Variant "StringValue"
             [ Dataman.Schema.toAny
                 (Dataman.Schema.Record Nothing
                     Nothing
@@ -50,7 +50,8 @@ schema =
                     ]
                 )
             ]
-        , Dataman.Schema.Variant "AttributeValue"
+        )
+        [ Dataman.Schema.Variant "AttributeValue"
             [ Dataman.Schema.toAny
                 (Dataman.Schema.Record Nothing
                     Nothing

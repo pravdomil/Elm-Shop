@@ -34,6 +34,6 @@ schema : Dataman.Schema.Schema CountryFilter
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "CountryFilter" ] "CountryFilter")
         Nothing
-        [ Dataman.Schema.Variant "Allow" [ Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.countrySchema) (Dataman.Schema.Tuple Nothing Nothing [])) ]
-        , Dataman.Schema.Variant "Deny" [ Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.countrySchema) (Dataman.Schema.Tuple Nothing Nothing [])) ]
+        (Dataman.Schema.Variant "Allow" [ Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.countrySchema) (Dataman.Schema.Tuple Nothing Nothing [])) ])
+        [ Dataman.Schema.Variant "Deny" [ Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.countrySchema) (Dataman.Schema.Tuple Nothing Nothing [])) ]
         ]

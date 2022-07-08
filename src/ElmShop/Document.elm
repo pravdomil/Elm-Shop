@@ -293,6 +293,20 @@ toType a =
             ElmShop.Document.Type.Warehouse_
 
 
+
+--
+
+
+type Msg
+    = Create Document
+    | Remove Document
+    | AttachUserToSession (Maybe (Id.Id ElmShop.Document.Type.User)) (Id.Id ElmShop.Document.Type.Session)
+
+
+
+--
+
+
 codec : Codec.Codec Document
 codec =
     Codec.custom
@@ -377,16 +391,6 @@ codec =
         |> Codec.buildCustom
 
 
-
---
-
-
-type Msg
-    = Create Document
-    | Remove Document
-    | AttachUserToSession (Maybe (Id.Id ElmShop.Document.Type.User)) (Id.Id ElmShop.Document.Type.Session)
-
-
 msgCodec : Codec.Codec Msg
 msgCodec =
     Codec.custom
@@ -411,8 +415,8 @@ schema : Dataman.Schema.Schema Document
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document" ] "Document")
         Nothing
-        [ Dataman.Schema.Variant "Attribute" [ Dataman.Schema.toAny ElmShop.Document.Attribute.schema ]
-        , Dataman.Schema.Variant "Category" [ Dataman.Schema.toAny ElmShop.Document.Category.schema ]
+        (Dataman.Schema.Variant "Attribute" [ Dataman.Schema.toAny ElmShop.Document.Attribute.schema ])
+        [ Dataman.Schema.Variant "Category" [ Dataman.Schema.toAny ElmShop.Document.Category.schema ]
         , Dataman.Schema.Variant "Country" [ Dataman.Schema.toAny ElmShop.Document.Country.schema ]
         , Dataman.Schema.Variant "Currency" [ Dataman.Schema.toAny ElmShop.Document.Currency.schema ]
         , Dataman.Schema.Variant "File" [ Dataman.Schema.toAny ElmShop.Document.File.schema ]

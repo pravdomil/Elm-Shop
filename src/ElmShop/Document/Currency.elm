@@ -139,13 +139,13 @@ codeSchema : Dataman.Schema.Schema Code
 codeSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Currency" ] "Code")
         Nothing
-        [ Dataman.Schema.Variant "Code" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Code" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []
 
 
 roundingSchema : Dataman.Schema.Schema Rounding
 roundingSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Currency" ] "Rounding")
         Nothing
-        [ Dataman.Schema.Variant "Rounding" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
-        ]
+        (Dataman.Schema.Variant "Rounding" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
+        []

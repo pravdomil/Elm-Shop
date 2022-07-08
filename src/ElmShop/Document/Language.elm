@@ -98,5 +98,5 @@ codeSchema : Dataman.Schema.Schema Code
 codeSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Language" ] "Code")
         Nothing
-        [ Dataman.Schema.Variant "Code" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Code" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []

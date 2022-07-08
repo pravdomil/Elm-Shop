@@ -35,5 +35,5 @@ schema : Dataman.Schema.Schema Html
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Html" ] "Html")
         Nothing
-        [ Dataman.Schema.Variant "Html" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Html" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []

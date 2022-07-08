@@ -109,7 +109,7 @@ stockSchema : Dataman.Schema.Schema Stock
 stockSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "OrderStatus" ] "Stock")
         Nothing
-        [ Dataman.Schema.Variant "NoChange" []
-        , Dataman.Schema.Variant "Reserve" []
+        (Dataman.Schema.Variant "NoChange" [])
+        [ Dataman.Schema.Variant "Reserve" []
         , Dataman.Schema.Variant "Subtract" []
         ]

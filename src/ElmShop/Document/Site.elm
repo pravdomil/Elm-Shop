@@ -188,16 +188,16 @@ urlSchema : Dataman.Schema.Schema Url
 urlSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Url")
         Nothing
-        [ Dataman.Schema.Variant "Url" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Url" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []
 
 
 descriptionSchema : Dataman.Schema.Schema Description
 descriptionSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Description")
         Nothing
-        [ Dataman.Schema.Variant "Description" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Description" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []
 
 
 contactSchema : Dataman.Schema.Schema Contact

@@ -358,8 +358,8 @@ numberSchema : Dataman.Schema.Schema Number
 numberSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Number")
         Nothing
-        [ Dataman.Schema.Variant "Number" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
-        ]
+        (Dataman.Schema.Variant "Number" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
+        []
 
 
 clientSchema : Dataman.Schema.Schema Client
@@ -377,8 +377,8 @@ clientNoteSchema : Dataman.Schema.Schema ClientNote
 clientNoteSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "ClientNote")
         Nothing
-        [ Dataman.Schema.Variant "ClientNote" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "ClientNote" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []
 
 
 billingSchema : Dataman.Schema.Schema Billing
@@ -394,8 +394,8 @@ billingNoteSchema : Dataman.Schema.Schema BillingNote
 billingNoteSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "BillingNote")
         Nothing
-        [ Dataman.Schema.Variant "BillingNote" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "BillingNote" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []
 
 
 currencySchema : Dataman.Schema.Schema Currency
@@ -423,8 +423,8 @@ cartItemTypeSchema : Dataman.Schema.Schema CartItemType
 cartItemTypeSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "CartItemType")
         Nothing
-        [ Dataman.Schema.Variant "ProductCartItem" [ Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema), Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema)) ]
-        ]
+        (Dataman.Schema.Variant "ProductCartItem" [ Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema), Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema)) ])
+        []
 
 
 shippingSchema : Dataman.Schema.Schema Shipping
@@ -465,6 +465,6 @@ messageNotificationSchema : Dataman.Schema.Schema MessageNotification
 messageNotificationSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "MessageNotification")
         Nothing
-        [ Dataman.Schema.Variant "NoNotification" []
-        , Dataman.Schema.Variant "NotifyClient" []
+        (Dataman.Schema.Variant "NoNotification" [])
+        [ Dataman.Schema.Variant "NotifyClient" []
         ]

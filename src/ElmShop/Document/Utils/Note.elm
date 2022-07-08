@@ -35,5 +35,5 @@ schema : Dataman.Schema.Schema Note
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Note" ] "Note")
         Nothing
-        [ Dataman.Schema.Variant "Note" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Note" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []

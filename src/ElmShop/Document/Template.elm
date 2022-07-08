@@ -90,7 +90,7 @@ contentSchema : Dataman.Schema.Schema Content
 contentSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Template" ] "Content")
         Nothing
-        [ Dataman.Schema.Variant "Universal"
+        (Dataman.Schema.Variant "Universal"
             [ Dataman.Schema.toAny
                 (Dataman.Schema.Record Nothing
                     Nothing
@@ -98,7 +98,8 @@ contentSchema =
                     ]
                 )
             ]
-        , Dataman.Schema.Variant "Localized"
+        )
+        [ Dataman.Schema.Variant "Localized"
             [ Dataman.Schema.toAny
                 (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema)
                     (Dataman.Schema.Record Nothing

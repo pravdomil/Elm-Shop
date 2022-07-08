@@ -1,6 +1,7 @@
 module ElmShop.Document.Utils.Money exposing (DecimalPlaces, Money, codec, decimalPlacesCodec, decimalPlacesSchema, decimalPlacesToInt, fromInt, intToDecimalPlaces, schema, toInt)
 
 import Codec
+import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 
@@ -17,26 +18,6 @@ fromInt =
 toInt : Money -> Int
 toInt (Money a) =
     a
-
-
-codec : Codec.Codec Money
-codec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                Money x1 ->
-                    fn1 x1
-        )
-        |> Codec.variant1 "Money" Money Codec.int
-        |> Codec.buildCustom
-
-
-schema : Dataman.Schema.Schema Money
-schema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Money" ] "Money")
-        Nothing
-        [ Dataman.Schema.Variant "Money" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
-        ]
 
 
 
@@ -59,6 +40,10 @@ intToDecimalPlaces a =
 decimalPlacesToInt : DecimalPlaces -> Int
 decimalPlacesToInt (DecimalPlaces a) =
     a
+
+
+
+--
 
 
 decimalPlacesCodec : Codec.Codec DecimalPlaces
@@ -86,9 +71,32 @@ decimalPlacesCodec =
         |> Codec.buildCustom
 
 
+codec : Codec.Codec Money
+codec =
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        Money x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "Money" Money Codec.int
+                |> Codec.buildCustom
+        )
+
+
+schema : Dataman.Schema.Schema Money
+schema =
+    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Money" ] "Money")
+        Nothing
+        (Dataman.Schema.Variant "Money" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
+        []
+
+
 decimalPlacesSchema : Dataman.Schema.Schema DecimalPlaces
 decimalPlacesSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Money" ] "DecimalPlaces")
         Nothing
-        [ Dataman.Schema.Variant "DecimalPlaces" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
-        ]
+        (Dataman.Schema.Variant "DecimalPlaces" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
+        []

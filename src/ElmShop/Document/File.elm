@@ -98,5 +98,5 @@ urlSchema : Dataman.Schema.Schema Url
 urlSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "File" ] "Url")
         Nothing
-        [ Dataman.Schema.Variant "Url" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Url" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []

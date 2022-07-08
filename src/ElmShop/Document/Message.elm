@@ -101,8 +101,8 @@ typeSchema : Dataman.Schema.Schema Type
 typeSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Message" ] "Type")
         Nothing
-        [ Dataman.Schema.Variant "Info" []
-        , Dataman.Schema.Variant "Warning" []
+        (Dataman.Schema.Variant "Info" [])
+        [ Dataman.Schema.Variant "Warning" []
         , Dataman.Schema.Variant "Error" []
         ]
 
@@ -111,5 +111,5 @@ contentSchema : Dataman.Schema.Schema Content
 contentSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Message" ] "Content")
         Nothing
-        [ Dataman.Schema.Variant "Content" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Content" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []

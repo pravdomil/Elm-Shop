@@ -61,5 +61,5 @@ schema : Dataman.Schema.Schema Password
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Password" ] "Password")
         Nothing
-        [ Dataman.Schema.Variant "Password" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Password" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []

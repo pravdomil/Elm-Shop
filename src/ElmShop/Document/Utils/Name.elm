@@ -57,5 +57,5 @@ schema : Dataman.Schema.Schema Name
 schema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Name" ] "Name")
         Nothing
-        [ Dataman.Schema.Variant "Name" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ]
-        ]
+        (Dataman.Schema.Variant "Name" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
+        []

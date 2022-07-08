@@ -75,5 +75,5 @@ ratingSchema : Dataman.Schema.Schema Rating
 ratingSchema =
     Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Review" ] "Rating")
         Nothing
-        [ Dataman.Schema.Variant "Rating" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ]
-        ]
+        (Dataman.Schema.Variant "Rating" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
+        []
