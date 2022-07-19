@@ -4,6 +4,7 @@
         "src",
         "src-external",
         "node_modules/dataman/src",
+        "node_modules/elm-codec/src",
         "node_modules/elm-data/src",
         "node_modules/elm-ffi/src",
         "node_modules/elm-ffi-node/src",
@@ -21,8 +22,7 @@
             "elm/time": "1.0.0",
             "elm/url": "1.0.0",
             "elm-community/list-extra": "8.5.2",
-            "mdgriffith/elm-ui": "1.1.8",
-            "miniBill/elm-codec": "2.0.0"
+            "mdgriffith/elm-ui": "1.1.8"
         },
         "indirect": {
             "elm/bytes": "1.0.8",

@@ -1,7 +1,6 @@
 module ElmShop.Document.Currency exposing (..)
 
 import Codec
-import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -65,7 +64,7 @@ type Rounding
 
 codec : Codec.Codec Currency
 codec =
-    Codec.object (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 -> { id = x1, meta = x2, name = x3, translations = x4, code = x5, value = x6, decimalPlaces = x7, rounding = x8, symbolLeft = x9, symbolRight = x10 })
+    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 -> { id = x1, meta = x2, name = x3, translations = x4, code = x5, value = x6, decimalPlaces = x7, rounding = x8, symbolLeft = x9, symbolRight = x10 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
@@ -73,10 +72,10 @@ codec =
         |> Codec.field "code" .code codeCodec
         |> Codec.field "value" .value ElmShop.Document.Utils.Money.codec
         |> Codec.field "decimalPlaces" .decimalPlaces ElmShop.Document.Utils.Money.decimalPlacesCodec
-        |> Codec.field "rounding" .rounding (Codec.Extra.maybe roundingCodec)
+        |> Codec.field "rounding" .rounding (Codec.maybe roundingCodec)
         |> Codec.field "symbolLeft" .symbolLeft Codec.string
         |> Codec.field "symbolRight" .symbolRight Codec.string
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 roundingCodec : Codec.Codec Rounding
@@ -105,9 +104,9 @@ codeCodec =
 
 translationCodec : Codec.Codec Translation
 translationCodec =
-    Codec.object (\x1 -> { name = x1 })
+    Codec.record (\x1 -> { name = x1 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 schema : Dataman.Schema.Schema Currency

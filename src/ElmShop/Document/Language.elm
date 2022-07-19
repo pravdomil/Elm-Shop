@@ -46,13 +46,13 @@ type Code
 
 codec : Codec.Codec Language
 codec =
-    Codec.object (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, name = x3, translations = x4, code = x5 })
+    Codec.record (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, name = x3, translations = x4, code = x5 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.field "code" .code codeCodec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 codeCodec : Codec.Codec Code
@@ -69,9 +69,9 @@ codeCodec =
 
 translationCodec : Codec.Codec Translation
 translationCodec =
-    Codec.object (\x1 -> { name = x1 })
+    Codec.record (\x1 -> { name = x1 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 schema : Dataman.Schema.Schema Language

@@ -44,13 +44,13 @@ type Type
 
 codec : Codec.Codec Message
 codec =
-    Codec.object (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, type_ = x3, message = x4, related = x5 })
+    Codec.record (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, type_ = x3, message = x4, related = x5 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "type_" .type_ typeCodec
         |> Codec.field "message" .message contentCodec
         |> Codec.field "related" .related (Codec.list Reference.codec)
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 contentCodec : Codec.Codec Content

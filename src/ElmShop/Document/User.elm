@@ -1,7 +1,6 @@
 module ElmShop.Document.User exposing (..)
 
 import Codec
-import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import ElmShop.Document.Type
@@ -50,13 +49,13 @@ create =
 
 codec : Codec.Codec User
 codec =
-    Codec.object (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, name = x3, email = x4, password = x5 })
+    Codec.record (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, name = x3, email = x4, password = x5 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "email" .email (Codec.Extra.maybe ElmShop.Document.Utils.Email.codec)
+        |> Codec.field "email" .email (Codec.maybe ElmShop.Document.Utils.Email.codec)
         |> Codec.field "password" .password ElmShop.Document.Utils.Password.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 schema : Dataman.Schema.Schema User

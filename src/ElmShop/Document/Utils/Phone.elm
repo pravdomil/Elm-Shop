@@ -35,6 +35,7 @@ codec =
             Phone
             (Codec.string
                 |> Codec.andThen
+                    identity
                     (\x ->
                         case fromString x of
                             Just x2 ->
@@ -43,7 +44,6 @@ codec =
                             Nothing ->
                                 Codec.fail "Cannot decode phone."
                     )
-                    identity
             )
         |> Codec.buildCustom
 

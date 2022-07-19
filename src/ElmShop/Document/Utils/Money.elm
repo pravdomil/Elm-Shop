@@ -1,7 +1,6 @@
 module ElmShop.Document.Utils.Money exposing (DecimalPlaces, Money, codec, decimalPlacesCodec, decimalPlacesSchema, decimalPlacesToInt, fromInt, intToDecimalPlaces, schema, toInt)
 
 import Codec
-import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 
@@ -58,6 +57,7 @@ decimalPlacesCodec =
             DecimalPlaces
             (Codec.int
                 |> Codec.andThen
+                    identity
                     (\x ->
                         case intToDecimalPlaces x of
                             Just x2 ->
@@ -66,7 +66,6 @@ decimalPlacesCodec =
                             Nothing ->
                                 Codec.fail "Cannot decode decimal places."
                     )
-                    identity
             )
         |> Codec.buildCustom
 

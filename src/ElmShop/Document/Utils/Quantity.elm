@@ -35,6 +35,7 @@ codec =
             Quantity
             (Codec.int
                 |> Codec.andThen
+                    identity
                     (\x ->
                         case fromInt x of
                             Just x2 ->
@@ -43,7 +44,6 @@ codec =
                             Nothing ->
                                 Codec.fail "Cannot decode quantity."
                     )
-                    identity
             )
         |> Codec.buildCustom
 

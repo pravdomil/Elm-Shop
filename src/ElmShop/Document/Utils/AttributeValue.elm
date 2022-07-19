@@ -25,15 +25,15 @@ codec =
         )
         |> Codec.variant1 "StringValue"
             StringValue
-            (Codec.object (\x1 -> { value = x1 })
+            (Codec.record (\x1 -> { value = x1 })
                 |> Codec.field "value" .value Codec.string
-                |> Codec.buildObject
+                |> Codec.buildRecord
             )
         |> Codec.variant1 "AttributeValue"
             AttributeValue
-            (Codec.object (\x1 -> { value = x1 })
+            (Codec.record (\x1 -> { value = x1 })
                 |> Codec.field "value" .value Reference.codec
-                |> Codec.buildObject
+                |> Codec.buildRecord
             )
         |> Codec.buildCustom
 

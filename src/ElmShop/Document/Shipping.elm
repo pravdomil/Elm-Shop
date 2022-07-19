@@ -1,7 +1,6 @@
 module ElmShop.Document.Shipping exposing (..)
 
 import Codec
-import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -64,22 +63,22 @@ type alias Basic =
 
 codec : Codec.Codec Shipping
 codec =
-    Codec.object (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, type_ = x4 })
+    Codec.record (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, type_ = x4 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.field "type_" .type_ typeCodec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 basicCodec : Codec.Codec Basic
 basicCodec =
-    Codec.object (\x1 x2 x3 x4 -> { price = x1, minTotal = x2, maxTotal = x3, filter = x4 })
+    Codec.record (\x1 x2 x3 x4 -> { price = x1, minTotal = x2, maxTotal = x3, filter = x4 })
         |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
-        |> Codec.field "minTotal" .minTotal (Codec.Extra.maybe ElmShop.Document.Utils.Money.codec)
-        |> Codec.field "maxTotal" .maxTotal (Codec.Extra.maybe ElmShop.Document.Utils.Money.codec)
-        |> Codec.field "filter" .filter (Codec.Extra.maybe ElmShop.Document.Utils.CountryFilter.codec)
-        |> Codec.buildObject
+        |> Codec.field "minTotal" .minTotal (Codec.maybe ElmShop.Document.Utils.Money.codec)
+        |> Codec.field "maxTotal" .maxTotal (Codec.maybe ElmShop.Document.Utils.Money.codec)
+        |> Codec.field "filter" .filter (Codec.maybe ElmShop.Document.Utils.CountryFilter.codec)
+        |> Codec.buildRecord
 
 
 typeCodec : Codec.Codec Type
@@ -96,10 +95,10 @@ typeCodec =
 
 translationCodec : Codec.Codec Translation
 translationCodec =
-    Codec.object (\x1 x2 -> { name = x1, content = x2 })
+    Codec.record (\x1 x2 -> { name = x1, content = x2 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 schema : Dataman.Schema.Schema Shipping

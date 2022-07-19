@@ -36,18 +36,18 @@ type alias Translation =
 
 codec : Codec.Codec Warehouse
 codec =
-    Codec.object (\x1 x2 x3 -> { id = x1, meta = x2, translations = x3 })
+    Codec.record (\x1 x2 x3 -> { id = x1, meta = x2, translations = x3 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 translationCodec : Codec.Codec Translation
 translationCodec =
-    Codec.object (\x1 -> { name = x1 })
+    Codec.record (\x1 -> { name = x1 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 schema : Dataman.Schema.Schema Warehouse

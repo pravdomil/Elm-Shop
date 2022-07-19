@@ -1,7 +1,6 @@
 module ElmShop.Document.Order exposing (..)
 
 import Codec
-import Codec.Extra
 import Dataman.Schema
 import Dataman.Schema.Basics
 import Dict.Any
@@ -187,7 +186,7 @@ type MessageNotification
 
 codec : Codec.Codec Order
 codec =
-    Codec.object (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 -> { id = x1, meta = x2, number = x3, client = x4, billing = x5, site = x6, language = x7, currency = x8, cart = x9, shipping = x10, payments = x11, messages = x12 })
+    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 -> { id = x1, meta = x2, number = x3, client = x4, billing = x5, site = x6, language = x7, currency = x8, cart = x9, shipping = x10, payments = x11, messages = x12 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "number" .number numberCodec
@@ -200,17 +199,17 @@ codec =
         |> Codec.field "shipping" .shipping (Dict.Any.Codec.dict Id.toString Id.codec shippingCodec)
         |> Codec.field "payments" .payments (Dict.Any.Codec.dict Id.toString Id.codec paymentCodec)
         |> Codec.field "messages" .messages (Dict.Any.Codec.dict Id.toString Id.codec messageCodec)
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 messageCodec : Codec.Codec Message
 messageCodec =
-    Codec.object (\x1 x2 x3 x4 -> { created = x1, status = x2, content = x3, notification = x4 })
+    Codec.record (\x1 x2 x3 x4 -> { created = x1, status = x2, content = x3, notification = x4 })
         |> Codec.field "created" .created Time.Codec.posix
-        |> Codec.field "status" .status (Codec.Extra.maybe Reference.codec)
+        |> Codec.field "status" .status (Codec.maybe Reference.codec)
         |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
         |> Codec.field "notification" .notification messageNotificationCodec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 messageNotificationCodec : Codec.Codec MessageNotification
@@ -231,34 +230,34 @@ messageNotificationCodec =
 
 paymentCodec : Codec.Codec Payment
 paymentCodec =
-    Codec.object (\x1 x2 x3 x4 -> { created = x1, name = x2, price = x3, payment = x4 })
+    Codec.record (\x1 x2 x3 x4 -> { created = x1, name = x2, price = x3, payment = x4 })
         |> Codec.field "created" .created Time.Codec.posix
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
         |> Codec.field "payment" .payment Reference.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 shippingCodec : Codec.Codec Shipping
 shippingCodec =
-    Codec.object (\x1 x2 x3 x4 x5 -> { created = x1, name = x2, price = x3, address = x4, shipping = x5 })
+    Codec.record (\x1 x2 x3 x4 x5 -> { created = x1, name = x2, price = x3, address = x4, shipping = x5 })
         |> Codec.field "created" .created Time.Codec.posix
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
-        |> Codec.field "address" .address (Codec.Extra.maybe ElmShop.Document.Utils.Address.codec)
+        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
         |> Codec.field "shipping" .shipping Reference.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 cartItemCodec : Codec.Codec CartItem
 cartItemCodec =
-    Codec.object (\x1 x2 x3 x4 x5 -> { created = x1, name = x2, price = x3, quantity = x4, type_ = x5 })
+    Codec.record (\x1 x2 x3 x4 x5 -> { created = x1, name = x2, price = x3, quantity = x4, type_ = x5 })
         |> Codec.field "created" .created Time.Codec.posix
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
         |> Codec.field "quantity" .quantity ElmShop.Document.Utils.Quantity.codec
         |> Codec.field "type_" .type_ cartItemTypeCodec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 cartItemTypeCodec : Codec.Codec CartItemType
@@ -269,24 +268,24 @@ cartItemTypeCodec =
                 ProductCartItem x1 x2 ->
                     fn1 x1 x2
         )
-        |> Codec.variant2 "ProductCartItem" ProductCartItem Reference.codec (Codec.Extra.maybe Reference.codec)
+        |> Codec.variant2 "ProductCartItem" ProductCartItem Reference.codec (Codec.maybe Reference.codec)
         |> Codec.buildCustom
 
 
 currencyCodec : Codec.Codec Currency
 currencyCodec =
-    Codec.object (\x1 x2 -> { id = x1, value = x2 })
+    Codec.record (\x1 x2 -> { id = x1, value = x2 })
         |> Codec.field "id" .id Reference.codec
         |> Codec.field "value" .value ElmShop.Document.Utils.Money.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 billingCodec : Codec.Codec Billing
 billingCodec =
-    Codec.object (\x1 x2 -> { address = x1, note = x2 })
-        |> Codec.field "address" .address (Codec.Extra.maybe ElmShop.Document.Utils.Address.codec)
+    Codec.record (\x1 x2 -> { address = x1, note = x2 })
+        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
         |> Codec.field "note" .note billingNoteCodec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 billingNoteCodec : Codec.Codec BillingNote
@@ -303,12 +302,12 @@ billingNoteCodec =
 
 clientCodec : Codec.Codec Client
 clientCodec =
-    Codec.object (\x1 x2 x3 x4 -> { email = x1, phone = x2, timeZone = x3, note = x4 })
+    Codec.record (\x1 x2 x3 x4 -> { email = x1, phone = x2, timeZone = x3, note = x4 })
         |> Codec.field "email" .email ElmShop.Document.Utils.Email.codec
         |> Codec.field "phone" .phone ElmShop.Document.Utils.Phone.codec
         |> Codec.field "timeZone" .timeZone ElmShop.Document.Utils.TimeZone.codec
         |> Codec.field "note" .note clientNoteCodec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 clientNoteCodec : Codec.Codec ClientNote

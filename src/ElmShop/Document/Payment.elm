@@ -80,36 +80,36 @@ type alias Comgate =
 
 codec : Codec.Codec Payment
 codec =
-    Codec.object (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, type_ = x4 })
+    Codec.record (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, type_ = x4 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.field "type_" .type_ typeCodec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 comgateCodec : Codec.Codec Comgate
 comgateCodec =
-    Codec.object (\x1 x2 x3 -> { merchantId = x1, secret = x2, test = x3 })
+    Codec.record (\x1 x2 x3 -> { merchantId = x1, secret = x2, test = x3 })
         |> Codec.field "merchantId" .merchantId Codec.string
         |> Codec.field "secret" .secret Codec.string
         |> Codec.field "test" .test Codec.bool
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 payPalCodec : Codec.Codec PayPal
 payPalCodec =
-    Codec.object (\x1 x2 -> { email = x1, test = x2 })
+    Codec.record (\x1 x2 -> { email = x1, test = x2 })
         |> Codec.field "email" .email ElmShop.Document.Utils.Email.codec
         |> Codec.field "test" .test Codec.bool
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 bankTransferCodec : Codec.Codec BankTransfer
 bankTransferCodec =
-    Codec.object (\x1 -> { orderStatus = x1 })
+    Codec.record (\x1 -> { orderStatus = x1 })
         |> Codec.field "orderStatus" .orderStatus Reference.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 typeCodec : Codec.Codec Type
@@ -134,10 +134,10 @@ typeCodec =
 
 translationCodec : Codec.Codec Translation
 translationCodec =
-    Codec.object (\x1 x2 -> { name = x1, content = x2 })
+    Codec.record (\x1 x2 -> { name = x1, content = x2 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 schema : Dataman.Schema.Schema Payment

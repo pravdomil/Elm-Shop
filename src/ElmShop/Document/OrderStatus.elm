@@ -49,12 +49,12 @@ type Stock
 
 codec : Codec.Codec OrderStatus
 codec =
-    Codec.object (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, stock = x4 })
+    Codec.record (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, stock = x4 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.field "stock" .stock stockCodec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 stockCodec : Codec.Codec Stock
@@ -79,10 +79,10 @@ stockCodec =
 
 translationCodec : Codec.Codec Translation
 translationCodec =
-    Codec.object (\x1 x2 -> { name = x1, content = x2 })
+    Codec.record (\x1 x2 -> { name = x1, content = x2 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 schema : Dataman.Schema.Schema OrderStatus

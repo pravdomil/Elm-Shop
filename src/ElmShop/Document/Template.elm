@@ -38,12 +38,12 @@ type Content
 
 codec : Codec.Codec Template
 codec =
-    Codec.object (\x1 x2 x3 x4 -> { id = x1, meta = x2, name = x3, content = x4 })
+    Codec.record (\x1 x2 x3 x4 -> { id = x1, meta = x2, name = x3, content = x4 })
         |> Codec.field "id" .id Id.codec
         |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "content" .content contentCodec
-        |> Codec.buildObject
+        |> Codec.buildRecord
 
 
 contentCodec : Codec.Codec Content
@@ -59,17 +59,17 @@ contentCodec =
         )
         |> Codec.variant1 "Universal"
             Universal
-            (Codec.object (\x1 -> { content = x1 })
+            (Codec.record (\x1 -> { content = x1 })
                 |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
-                |> Codec.buildObject
+                |> Codec.buildRecord
             )
         |> Codec.variant1 "Localized"
             Localized
             (Dict.Any.Codec.dict Reference.toString
                 Reference.codec
-                (Codec.object (\x1 -> { content = x1 })
+                (Codec.record (\x1 -> { content = x1 })
                     |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
-                    |> Codec.buildObject
+                    |> Codec.buildRecord
                 )
             )
         |> Codec.buildCustom
