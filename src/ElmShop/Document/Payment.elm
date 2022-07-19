@@ -10,17 +10,15 @@ import ElmShop.Document.Utils.Email
 import ElmShop.Document.Utils.Html
 import ElmShop.Document.Utils.Meta
 import ElmShop.Document.Utils.Name
-import Id
 import Reference
 
 
 type alias Payment =
-    { id : Id.Id ElmShop.Document.Type.Payment
-    , meta : ElmShop.Document.Utils.Meta.Meta
+    { translations : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Language) Translation
+    , type_ : Type
 
     --
-    , translations : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Language) Translation
-    , type_ : Type
+    , meta : ElmShop.Document.Utils.Meta.Meta
     }
 
 
@@ -80,11 +78,10 @@ type alias Comgate =
 
 codec : Codec.Codec Payment
 codec =
-    Codec.record (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, type_ = x4 })
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+    Codec.record (\x1 x2 x3 -> { translations = x1, type_ = x2, meta = x3 })
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.field "type_" .type_ typeCodec
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -114,22 +111,25 @@ bankTransferCodec =
 
 typeCodec : Codec.Codec Type
 typeCodec =
-    Codec.custom
-        (\fn1 fn2 fn3 x ->
-            case x of
-                BankTransfer_ x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 fn2 fn3 x ->
+                    case x of
+                        BankTransfer_ x1 ->
+                            fn1 x1
 
-                PayPal_ x1 ->
-                    fn2 x1
+                        PayPal_ x1 ->
+                            fn2 x1
 
-                Comgate_ x1 ->
-                    fn3 x1
+                        Comgate_ x1 ->
+                            fn3 x1
+                )
+                |> Codec.variant1 "BankTransfer_" BankTransfer_ bankTransferCodec
+                |> Codec.variant1 "PayPal_" PayPal_ payPalCodec
+                |> Codec.variant1 "Comgate_" Comgate_ comgateCodec
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "BankTransfer_" BankTransfer_ bankTransferCodec
-        |> Codec.variant1 "PayPal_" PayPal_ payPalCodec
-        |> Codec.variant1 "Comgate_" Comgate_ comgateCodec
-        |> Codec.buildCustom
 
 
 translationCodec : Codec.Codec Translation
@@ -144,10 +144,9 @@ schema : Dataman.Schema.Schema Payment
 schema =
     Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Payment"))
         Nothing
-        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.paymentSchema))
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
+        [ Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
         , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
         ]
 
 

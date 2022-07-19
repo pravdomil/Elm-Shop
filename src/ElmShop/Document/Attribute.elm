@@ -8,18 +8,16 @@ import Dict.Any.Codec
 import ElmShop.Document.Type
 import ElmShop.Document.Utils.Meta
 import ElmShop.Document.Utils.Name
-import Id
 import Reference
 
 
 type alias Attribute =
-    { id : Id.Id ElmShop.Document.Type.Attribute
-    , meta : ElmShop.Document.Utils.Meta.Meta
-
-    --
-    , translations : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Language) Translation
+    { translations : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Language) Translation
     , parent : Maybe (Reference.Reference ElmShop.Document.Type.Attribute)
     , image : Maybe (Reference.Reference ElmShop.Document.Type.File)
+
+    --
+    , meta : ElmShop.Document.Utils.Meta.Meta
     }
 
 
@@ -38,12 +36,11 @@ type alias Translation =
 
 codec : Codec.Codec Attribute
 codec =
-    Codec.record (\x1 x2 x3 x4 x5 -> { id = x1, meta = x2, translations = x3, parent = x4, image = x5 })
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+    Codec.record (\x1 x2 x3 x4 -> { translations = x1, parent = x2, image = x3, meta = x4 })
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.field "parent" .parent (Codec.maybe Reference.codec)
         |> Codec.field "image" .image (Codec.maybe Reference.codec)
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -58,11 +55,10 @@ schema : Dataman.Schema.Schema Attribute
 schema =
     Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Attribute" ] "Attribute"))
         Nothing
-        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.attributeSchema))
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
+        [ Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
         , Dataman.Schema.RecordField "parent" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.attributeSchema)))
         , Dataman.Schema.RecordField "image" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.fileSchema)))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
         ]
 
 

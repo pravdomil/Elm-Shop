@@ -11,17 +11,15 @@ import ElmShop.Document.Utils.Html
 import ElmShop.Document.Utils.Meta
 import ElmShop.Document.Utils.Money
 import ElmShop.Document.Utils.Name
-import Id
 import Reference
 
 
 type alias Shipping =
-    { id : Id.Id ElmShop.Document.Type.Shipping
-    , meta : ElmShop.Document.Utils.Meta.Meta
+    { translations : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Language) Translation
+    , type_ : Type
 
     --
-    , translations : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Language) Translation
-    , type_ : Type
+    , meta : ElmShop.Document.Utils.Meta.Meta
     }
 
 
@@ -63,11 +61,10 @@ type alias Basic =
 
 codec : Codec.Codec Shipping
 codec =
-    Codec.record (\x1 x2 x3 x4 -> { id = x1, meta = x2, translations = x3, type_ = x4 })
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+    Codec.record (\x1 x2 x3 -> { translations = x1, type_ = x2, meta = x3 })
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.field "type_" .type_ typeCodec
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -83,14 +80,17 @@ basicCodec =
 
 typeCodec : Codec.Codec Type
 typeCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                Basic_ x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        Basic_ x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "Basic_" Basic_ basicCodec
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Basic_" Basic_ basicCodec
-        |> Codec.buildCustom
 
 
 translationCodec : Codec.Codec Translation
@@ -105,10 +105,9 @@ schema : Dataman.Schema.Schema Shipping
 schema =
     Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Shipping"))
         Nothing
-        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.shippingSchema))
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
+        [ Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
         , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
         ]
 
 

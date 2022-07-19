@@ -13,16 +13,11 @@ import ElmShop.Document.Utils.Money
 import ElmShop.Document.Utils.Name
 import ElmShop.Document.Utils.Order
 import ElmShop.Document.Utils.Quantity
-import Id
 import Reference
 
 
 type alias Product =
-    { id : Id.Id ElmShop.Document.Type.Product
-    , meta : ElmShop.Document.Utils.Meta.Meta
-
-    --
-    , type_ : Type
+    { type_ : Type
     , sale : Sale
 
     --
@@ -41,6 +36,9 @@ type alias Product =
     --
     , related : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Product) ()
     , categories : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Category) ()
+
+    --
+    , meta : ElmShop.Document.Utils.Meta.Meta
     }
 
 
@@ -131,9 +129,7 @@ type StockQuantity
 
 codec : Codec.Codec Product
 codec =
-    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 -> { id = x1, meta = x2, type_ = x3, sale = x4, translations = x5, sku = x6, stock = x7, reservations = x8, image = x9, gallery = x10, attributes = x11, related = x12, categories = x13 })
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 -> { type_ = x1, sale = x2, translations = x3, sku = x4, stock = x5, reservations = x6, image = x7, gallery = x8, attributes = x9, related = x10, categories = x11, meta = x12 })
         |> Codec.field "type_" .type_ typeCodec
         |> Codec.field "sale" .sale saleCodec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
@@ -161,43 +157,53 @@ codec =
         |> Codec.field "attributes" .attributes (Dict.Any.Codec.dict Reference.toString Reference.codec ElmShop.Document.Utils.AttributeValue.codec)
         |> Codec.field "related" .related (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
         |> Codec.field "categories" .categories (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
 reservationsCodec : Codec.Codec Reservations
 reservationsCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                Reservations x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        Reservations x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "Reservations" Reservations Codec.int
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Reservations" Reservations Codec.int
-        |> Codec.buildCustom
 
 
 stockQuantityCodec : Codec.Codec StockQuantity
 stockQuantityCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                StockQuantity x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        StockQuantity x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "StockQuantity" StockQuantity Codec.int
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "StockQuantity" StockQuantity Codec.int
-        |> Codec.buildCustom
 
 
 skuCodec : Codec.Codec Sku
 skuCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                Sku x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        Sku x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "Sku" Sku Codec.string
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Sku" Sku Codec.string
-        |> Codec.buildCustom
 
 
 translationCodec : Codec.Codec Translation
@@ -210,18 +216,21 @@ translationCodec =
 
 saleCodec : Codec.Codec Sale
 saleCodec =
-    Codec.custom
-        (\fn1 fn2 x ->
-            case x of
-                ForSale ->
-                    fn1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 fn2 x ->
+                    case x of
+                        ForSale ->
+                            fn1
 
-                NotForSale ->
-                    fn2
+                        NotForSale ->
+                            fn2
+                )
+                |> Codec.variant0 "ForSale" ForSale
+                |> Codec.variant0 "NotForSale" NotForSale
+                |> Codec.buildCustom
         )
-        |> Codec.variant0 "ForSale" ForSale
-        |> Codec.variant0 "NotForSale" NotForSale
-        |> Codec.buildCustom
 
 
 setCodec : Codec.Codec Set
@@ -256,31 +265,32 @@ singleCodec =
 
 typeCodec : Codec.Codec Type
 typeCodec =
-    Codec.custom
-        (\fn1 fn2 fn3 x ->
-            case x of
-                Single_ x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 fn2 fn3 x ->
+                    case x of
+                        Single_ x1 ->
+                            fn1 x1
 
-                Variable_ x1 ->
-                    fn2 x1
+                        Variable_ x1 ->
+                            fn2 x1
 
-                Set_ x1 ->
-                    fn3 x1
+                        Set_ x1 ->
+                            fn3 x1
+                )
+                |> Codec.variant1 "Single_" Single_ singleCodec
+                |> Codec.variant1 "Variable_" Variable_ variableCodec
+                |> Codec.variant1 "Set_" Set_ setCodec
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Single_" Single_ singleCodec
-        |> Codec.variant1 "Variable_" Variable_ variableCodec
-        |> Codec.variant1 "Set_" Set_ setCodec
-        |> Codec.buildCustom
 
 
 schema : Dataman.Schema.Schema Product
 schema =
     Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Product" ] "Product"))
         Nothing
-        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.productSchema))
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
+        [ Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
         , Dataman.Schema.RecordField "sale" (Dataman.Schema.toAny saleSchema)
         , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
         , Dataman.Schema.RecordField "sku" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe skuSchema))
@@ -309,6 +319,7 @@ schema =
         , Dataman.Schema.RecordField "attributes" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.attributeSchema) ElmShop.Document.Utils.AttributeValue.schema))
         , Dataman.Schema.RecordField "related" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema) (Dataman.Schema.Tuple Nothing Nothing [])))
         , Dataman.Schema.RecordField "categories" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.categorySchema) (Dataman.Schema.Tuple Nothing Nothing [])))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
         ]
 
 

@@ -9,16 +9,11 @@ import ElmShop.Document.Type
 import ElmShop.Document.Utils.Meta
 import ElmShop.Document.Utils.Money
 import ElmShop.Document.Utils.Name
-import Id
 import Reference
 
 
 type alias Currency =
-    { id : Id.Id ElmShop.Document.Type.Currency
-    , meta : ElmShop.Document.Utils.Meta.Meta
-
-    --
-    , name : ElmShop.Document.Utils.Name.Name
+    { name : ElmShop.Document.Utils.Name.Name
     , translations : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Language) Translation
     , code : Code
 
@@ -30,6 +25,9 @@ type alias Currency =
     --
     , symbolLeft : String
     , symbolRight : String
+
+    --
+    , meta : ElmShop.Document.Utils.Meta.Meta
     }
 
 
@@ -64,9 +62,7 @@ type Rounding
 
 codec : Codec.Codec Currency
 codec =
-    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 -> { id = x1, meta = x2, name = x3, translations = x4, code = x5, value = x6, decimalPlaces = x7, rounding = x8, symbolLeft = x9, symbolRight = x10 })
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 -> { name = x1, translations = x2, code = x3, value = x4, decimalPlaces = x5, rounding = x6, symbolLeft = x7, symbolRight = x8, meta = x9 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
         |> Codec.field "code" .code codeCodec
@@ -75,31 +71,38 @@ codec =
         |> Codec.field "rounding" .rounding (Codec.maybe roundingCodec)
         |> Codec.field "symbolLeft" .symbolLeft Codec.string
         |> Codec.field "symbolRight" .symbolRight Codec.string
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
 roundingCodec : Codec.Codec Rounding
 roundingCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                Rounding x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        Rounding x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "Rounding" Rounding Codec.int
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Rounding" Rounding Codec.int
-        |> Codec.buildCustom
 
 
 codeCodec : Codec.Codec Code
 codeCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                Code x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        Code x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "Code" Code Codec.string
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Code" Code Codec.string
-        |> Codec.buildCustom
 
 
 translationCodec : Codec.Codec Translation
@@ -113,9 +116,7 @@ schema : Dataman.Schema.Schema Currency
 schema =
     Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Currency" ] "Currency"))
         Nothing
-        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.currencySchema))
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        , Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
         , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
         , Dataman.Schema.RecordField "code" (Dataman.Schema.toAny codeSchema)
         , Dataman.Schema.RecordField "value" (Dataman.Schema.toAny ElmShop.Document.Utils.Money.schema)
@@ -123,6 +124,7 @@ schema =
         , Dataman.Schema.RecordField "rounding" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe roundingSchema))
         , Dataman.Schema.RecordField "symbolLeft" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
         , Dataman.Schema.RecordField "symbolRight" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
         ]
 
 

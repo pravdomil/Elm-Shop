@@ -22,11 +22,7 @@ import Time.Codec
 
 
 type alias Order =
-    { id : Id.Id ElmShop.Document.Type.Order
-    , meta : ElmShop.Document.Utils.Meta.Meta
-
-    --
-    , number : Number
+    { number : Number
     , client : Client
     , billing : Billing
 
@@ -40,6 +36,9 @@ type alias Order =
     , shipping : Dict.Any.Dict (Id.Id Shipping) Shipping
     , payments : Dict.Any.Dict (Id.Id Payment) Payment
     , messages : Dict.Any.Dict (Id.Id Message) Message
+
+    --
+    , meta : ElmShop.Document.Utils.Meta.Meta
     }
 
 
@@ -186,9 +185,7 @@ type MessageNotification
 
 codec : Codec.Codec Order
 codec =
-    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 -> { id = x1, meta = x2, number = x3, client = x4, billing = x5, site = x6, language = x7, currency = x8, cart = x9, shipping = x10, payments = x11, messages = x12 })
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 -> { number = x1, client = x2, billing = x3, site = x4, language = x5, currency = x6, cart = x7, shipping = x8, payments = x9, messages = x10, meta = x11 })
         |> Codec.field "number" .number numberCodec
         |> Codec.field "client" .client clientCodec
         |> Codec.field "billing" .billing billingCodec
@@ -199,6 +196,7 @@ codec =
         |> Codec.field "shipping" .shipping (Dict.Any.Codec.dict Id.toString Id.codec shippingCodec)
         |> Codec.field "payments" .payments (Dict.Any.Codec.dict Id.toString Id.codec paymentCodec)
         |> Codec.field "messages" .messages (Dict.Any.Codec.dict Id.toString Id.codec messageCodec)
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -214,18 +212,21 @@ messageCodec =
 
 messageNotificationCodec : Codec.Codec MessageNotification
 messageNotificationCodec =
-    Codec.custom
-        (\fn1 fn2 x ->
-            case x of
-                NoNotification ->
-                    fn1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 fn2 x ->
+                    case x of
+                        NoNotification ->
+                            fn1
 
-                NotifyClient ->
-                    fn2
+                        NotifyClient ->
+                            fn2
+                )
+                |> Codec.variant0 "NoNotification" NoNotification
+                |> Codec.variant0 "NotifyClient" NotifyClient
+                |> Codec.buildCustom
         )
-        |> Codec.variant0 "NoNotification" NoNotification
-        |> Codec.variant0 "NotifyClient" NotifyClient
-        |> Codec.buildCustom
 
 
 paymentCodec : Codec.Codec Payment
@@ -262,14 +263,17 @@ cartItemCodec =
 
 cartItemTypeCodec : Codec.Codec CartItemType
 cartItemTypeCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                ProductCartItem x1 x2 ->
-                    fn1 x1 x2
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        ProductCartItem x1 x2 ->
+                            fn1 x1 x2
+                )
+                |> Codec.variant2 "ProductCartItem" ProductCartItem Reference.codec (Codec.maybe Reference.codec)
+                |> Codec.buildCustom
         )
-        |> Codec.variant2 "ProductCartItem" ProductCartItem Reference.codec (Codec.maybe Reference.codec)
-        |> Codec.buildCustom
 
 
 currencyCodec : Codec.Codec Currency
@@ -290,14 +294,17 @@ billingCodec =
 
 billingNoteCodec : Codec.Codec BillingNote
 billingNoteCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                BillingNote x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        BillingNote x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "BillingNote" BillingNote Codec.string
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "BillingNote" BillingNote Codec.string
-        |> Codec.buildCustom
 
 
 clientCodec : Codec.Codec Client
@@ -312,35 +319,39 @@ clientCodec =
 
 clientNoteCodec : Codec.Codec ClientNote
 clientNoteCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                ClientNote x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        ClientNote x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "ClientNote" ClientNote Codec.string
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "ClientNote" ClientNote Codec.string
-        |> Codec.buildCustom
 
 
 numberCodec : Codec.Codec Number
 numberCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                Number x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        Number x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "Number" Number Codec.int
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Number" Number Codec.int
-        |> Codec.buildCustom
 
 
 schema : Dataman.Schema.Schema Order
 schema =
     Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Order" ] "Order"))
         Nothing
-        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.orderSchema))
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        , Dataman.Schema.RecordField "number" (Dataman.Schema.toAny numberSchema)
+        [ Dataman.Schema.RecordField "number" (Dataman.Schema.toAny numberSchema)
         , Dataman.Schema.RecordField "client" (Dataman.Schema.toAny clientSchema)
         , Dataman.Schema.RecordField "billing" (Dataman.Schema.toAny billingSchema)
         , Dataman.Schema.RecordField "site" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.siteSchema))
@@ -350,6 +361,7 @@ schema =
         , Dataman.Schema.RecordField "shipping" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.id shippingSchema) shippingSchema))
         , Dataman.Schema.RecordField "payments" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.id paymentSchema) paymentSchema))
         , Dataman.Schema.RecordField "messages" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.id messageSchema) messageSchema))
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
         ]
 
 

@@ -48,67 +48,6 @@ type Document
     | Warehouse ElmShop.Document.Warehouse.Warehouse
 
 
-id : Document -> Id.Id Document
-id a =
-    case a of
-        Attribute b ->
-            Id.toAny b.id
-
-        Category b ->
-            Id.toAny b.id
-
-        Country b ->
-            Id.toAny b.id
-
-        Currency b ->
-            Id.toAny b.id
-
-        File b ->
-            Id.toAny b.id
-
-        Language b ->
-            Id.toAny b.id
-
-        Message b ->
-            Id.toAny b.id
-
-        Order b ->
-            Id.toAny b.id
-
-        OrderStatus b ->
-            Id.toAny b.id
-
-        Page b ->
-            Id.toAny b.id
-
-        Payment b ->
-            Id.toAny b.id
-
-        Product b ->
-            Id.toAny b.id
-
-        Review b ->
-            Id.toAny b.id
-
-        Session b ->
-            Id.toAny b.id
-
-        Shipping b ->
-            Id.toAny b.id
-
-        Site b ->
-            Id.toAny b.id
-
-        Template b ->
-            Id.toAny b.id
-
-        User b ->
-            Id.toAny b.id
-
-        Warehouse b ->
-            Id.toAny b.id
-
-
 meta : Document -> ElmShop.Document.Utils.Meta.Meta
 meta a =
     case a of
@@ -297,8 +236,8 @@ toType a =
 
 
 type Msg
-    = Create Document
-    | Remove Document
+    = Create ( Id.Id Document, Document )
+    | Remove (Id.Id Document)
     | AttachUserToSession (Maybe (Id.Id ElmShop.Document.Type.User)) (Id.Id ElmShop.Document.Type.Session)
 
 
@@ -392,22 +331,25 @@ codec =
 
 msgCodec : Codec.Codec Msg
 msgCodec =
-    Codec.custom
-        (\fn1 fn2 fn3 x ->
-            case x of
-                Create x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 fn2 fn3 x ->
+                    case x of
+                        Create x1 ->
+                            fn1 x1
 
-                Remove x1 ->
-                    fn2 x1
+                        Remove x1 ->
+                            fn2 x1
 
-                AttachUserToSession x1 x2 ->
-                    fn3 x1 x2
+                        AttachUserToSession x1 x2 ->
+                            fn3 x1 x2
+                )
+                |> Codec.variant1 "Create" Create (Codec.tuple Id.codec codec)
+                |> Codec.variant1 "Remove" Remove Id.codec
+                |> Codec.variant2 "AttachUserToSession" AttachUserToSession (Codec.maybe Id.codec) Id.codec
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Create" Create codec
-        |> Codec.variant1 "Remove" Remove codec
-        |> Codec.variant2 "AttachUserToSession" AttachUserToSession (Codec.maybe Id.codec) Id.codec
-        |> Codec.buildCustom
 
 
 schema : Dataman.Schema.Schema Document

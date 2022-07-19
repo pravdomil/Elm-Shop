@@ -13,16 +13,11 @@ import ElmShop.Document.Utils.Name
 import ElmShop.Document.Utils.Note
 import ElmShop.Document.Utils.Order
 import ElmShop.Document.Utils.Phone
-import Id
 import Reference
 
 
 type alias Site =
-    { id : Id.Id ElmShop.Document.Type.Site
-    , meta : ElmShop.Document.Utils.Meta.Meta
-
-    --
-    , name : ElmShop.Document.Utils.Name.Name
+    { name : ElmShop.Document.Utils.Name.Name
     , url : Url
     , description : Description
 
@@ -41,6 +36,9 @@ type alias Site =
     --
     , header : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Page) { order : ElmShop.Document.Utils.Order.Order }
     , footer : Dict.Any.Dict (Reference.Reference ElmShop.Document.Type.Page) { order : ElmShop.Document.Utils.Order.Order }
+
+    --
+    , meta : ElmShop.Document.Utils.Meta.Meta
     }
 
 
@@ -78,9 +76,7 @@ type alias Contact =
 
 codec : Codec.Codec Site
 codec =
-    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 -> { id = x1, meta = x2, name = x3, url = x4, description = x5, contact = x6, language = x7, homePage = x8, currency = x9, logo = x10, icon = x11, header = x12, footer = x13 })
-        |> Codec.field "id" .id Id.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+    Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 -> { name = x1, url = x2, description = x3, contact = x4, language = x5, homePage = x6, currency = x7, logo = x8, icon = x9, header = x10, footer = x11, meta = x12 })
         |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
         |> Codec.field "url" .url urlCodec
         |> Codec.field "description" .description descriptionCodec
@@ -108,6 +104,7 @@ codec =
                     |> Codec.buildRecord
                 )
             )
+        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -123,35 +120,39 @@ contactCodec =
 
 descriptionCodec : Codec.Codec Description
 descriptionCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                Description x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        Description x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "Description" Description Codec.string
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Description" Description Codec.string
-        |> Codec.buildCustom
 
 
 urlCodec : Codec.Codec Url
 urlCodec =
-    Codec.custom
-        (\fn1 x ->
-            case x of
-                Url x1 ->
-                    fn1 x1
+    Codec.lazy
+        (\() ->
+            Codec.custom
+                (\fn1 x ->
+                    case x of
+                        Url x1 ->
+                            fn1 x1
+                )
+                |> Codec.variant1 "Url" Url Codec.string
+                |> Codec.buildCustom
         )
-        |> Codec.variant1 "Url" Url Codec.string
-        |> Codec.buildCustom
 
 
 schema : Dataman.Schema.Schema Site
 schema =
     Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Site"))
         Nothing
-        [ Dataman.Schema.RecordField "id" (Dataman.Schema.toAny (Dataman.Schema.Basics.id ElmShop.Document.Type.siteSchema))
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        , Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
+        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
         , Dataman.Schema.RecordField "url" (Dataman.Schema.toAny urlSchema)
         , Dataman.Schema.RecordField "description" (Dataman.Schema.toAny descriptionSchema)
         , Dataman.Schema.RecordField "contact" (Dataman.Schema.toAny contactSchema)
@@ -180,6 +181,7 @@ schema =
                     )
                 )
             )
+        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
         ]
 
 
