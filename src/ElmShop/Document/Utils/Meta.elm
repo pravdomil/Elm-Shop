@@ -3,8 +3,10 @@ module ElmShop.Document.Utils.Meta exposing (..)
 import Codec
 import Dataman.Schema
 import Dataman.Schema.Basics
+import ElmShop.Document.Type
 import ElmShop.Document.Utils.Note
 import ElmShop.Document.Utils.Order
+import Id
 import Task
 import Task.Extra
 import Time
@@ -15,6 +17,7 @@ type alias Meta =
     { status : Status
     , created : TimeCreated
     , modified : TimeModified
+    , author : Maybe (Id.Id ElmShop.Document.Type.User)
 
     --
     , order : ElmShop.Document.Utils.Order.Order
@@ -29,6 +32,7 @@ create =
             { status = Published x
             , created = TimeCreated x
             , modified = TimeModified x
+            , author = Nothing
 
             --
             , order = ElmShop.Document.Utils.Order.default
@@ -70,10 +74,11 @@ type TimeModified
 
 codec : Codec.Codec Meta
 codec =
-    Codec.object (\x1 x2 x3 x4 x5 -> { status = x1, created = x2, modified = x3, order = x4, note = x5 })
+    Codec.object (\x1 x2 x3 x4 x5 x6 -> { status = x1, created = x2, modified = x3, author = x4, order = x5, note = x6 })
         |> Codec.field "status" .status statusCodec
         |> Codec.field "created" .created timeCreatedCodec
         |> Codec.field "modified" .modified timeModifiedCodec
+        |> Codec.field "author" .author (Codec.maybe Id.codec)
         |> Codec.field "order" .order ElmShop.Document.Utils.Order.codec
         |> Codec.field "note" .note ElmShop.Document.Utils.Note.codec
         |> Codec.buildObject
@@ -130,6 +135,7 @@ schema =
         [ Dataman.Schema.RecordField "status" (Dataman.Schema.toAny statusSchema)
         , Dataman.Schema.RecordField "created" (Dataman.Schema.toAny timeCreatedSchema)
         , Dataman.Schema.RecordField "modified" (Dataman.Schema.toAny timeModifiedSchema)
+        , Dataman.Schema.RecordField "author" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.id ElmShop.Document.Type.userSchema)))
         , Dataman.Schema.RecordField "order" (Dataman.Schema.toAny ElmShop.Document.Utils.Order.schema)
         , Dataman.Schema.RecordField "note" (Dataman.Schema.toAny ElmShop.Document.Utils.Note.schema)
         ]
