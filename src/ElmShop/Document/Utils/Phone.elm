@@ -1,8 +1,7 @@
-module ElmShop.Document.Utils.Phone exposing (Phone, codec, fromString, schema, toString)
+module ElmShop.Document.Utils.Phone exposing (Phone, codec, fromString, toString, type_)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 
 
 type Phone
@@ -48,9 +47,13 @@ codec =
         |> Codec.buildCustom
 
 
-schema : Dataman.Schema.Schema Phone
-schema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Phone" ] "Phone")
-        Nothing
-        (Dataman.Schema.Variant "Phone" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
-        []
+type_ : Dataman.Type.Type Phone
+type_ =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Phone" ] "Phone"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Phone", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            , []
+            )
+        }

@@ -1,8 +1,7 @@
 module ElmShop.Document.Message exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import ElmShop.Document.Utils.Meta
 import Reference
 
@@ -87,30 +86,41 @@ typeCodec =
         )
 
 
-schema : Dataman.Schema.Schema Message
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Message" ] "Message"))
-        Nothing
-        [ Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
-        , Dataman.Schema.RecordField "message" (Dataman.Schema.toAny contentSchema)
-        , Dataman.Schema.RecordField "related" (Dataman.Schema.toAny (Dataman.Schema.Basics.list (Dataman.Schema.Basics.reference (Dataman.Schema.Tuple Nothing Nothing []))))
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        ]
+type_ : Dataman.Type.Type Message
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Message" ] "Message")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "type_", type_ = Dataman.Type.toAny typeType }
+            , { name = Dataman.Type.FieldName "message", type_ = Dataman.Type.toAny contentType }
+            , { name = Dataman.Type.FieldName "related", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.List_ >> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] }))) }
+            , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
+            ]
+        }
 
 
-typeSchema : Dataman.Schema.Schema Type
-typeSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Message" ] "Type")
-        Nothing
-        (Dataman.Schema.Variant "Info" [])
-        [ Dataman.Schema.Variant "Warning" []
-        , Dataman.Schema.Variant "Error" []
-        ]
+typeType : Dataman.Type.Type Type
+typeType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Message" ] "Type"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Info", arguments = [] }
+            , [ { name = Dataman.Type.VariantName "Warning", arguments = [] }
+              , { name = Dataman.Type.VariantName "Error", arguments = [] }
+              ]
+            )
+        }
 
 
-contentSchema : Dataman.Schema.Schema Content
-contentSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Message" ] "Content")
-        Nothing
-        (Dataman.Schema.Variant "Content" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
-        []
+contentType : Dataman.Type.Type Content
+contentType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Message" ] "Content"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Content", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            , []
+            )
+        }

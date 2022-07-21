@@ -1,8 +1,7 @@
 module ElmShop.Document.Warehouse exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -47,18 +46,24 @@ translationCodec =
         |> Codec.buildRecord
 
 
-schema : Dataman.Schema.Schema Warehouse
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Warehouse" ] "Warehouse"))
-        Nothing
-        [ Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        ]
+type_ : Dataman.Type.Type Warehouse
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Warehouse" ] "Warehouse")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) translationType) }
+            , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
+            ]
+        }
 
 
-translationSchema : Dataman.Schema.Schema Translation
-translationSchema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Warehouse" ] "Translation"))
-        Nothing
-        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
-        ]
+translationType : Dataman.Type.Type Translation
+translationType =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Warehouse" ] "Translation")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
+            ]
+        }

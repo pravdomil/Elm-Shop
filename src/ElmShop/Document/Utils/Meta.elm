@@ -1,8 +1,7 @@
 module ElmShop.Document.Utils.Meta exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import ElmShop.Document.Type
 import ElmShop.Document.Utils.Note
 import ElmShop.Document.Utils.Order
@@ -128,40 +127,55 @@ statusCodec =
         |> Codec.buildCustom
 
 
-schema : Dataman.Schema.Schema Meta
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Meta" ] "Meta"))
-        Nothing
-        [ Dataman.Schema.RecordField "status" (Dataman.Schema.toAny statusSchema)
-        , Dataman.Schema.RecordField "created" (Dataman.Schema.toAny timeCreatedSchema)
-        , Dataman.Schema.RecordField "modified" (Dataman.Schema.toAny timeModifiedSchema)
-        , Dataman.Schema.RecordField "author" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.userSchema)))
-        , Dataman.Schema.RecordField "order" (Dataman.Schema.toAny ElmShop.Document.Utils.Order.schema)
-        , Dataman.Schema.RecordField "note" (Dataman.Schema.toAny ElmShop.Document.Utils.Note.schema)
-        ]
+type_ : Dataman.Type.Type Meta
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Meta" ] "Meta")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "status", type_ = Dataman.Type.toAny statusType }
+            , { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny timeCreatedType }
+            , { name = Dataman.Type.FieldName "modified", type_ = Dataman.Type.toAny timeModifiedType }
+            , { name = Dataman.Type.FieldName "author", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.userType)) }
+            , { name = Dataman.Type.FieldName "order", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Order.type_ }
+            , { name = Dataman.Type.FieldName "note", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Note.type_ }
+            ]
+        }
 
 
-statusSchema : Dataman.Schema.Schema Status
-statusSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Meta" ] "Status")
-        Nothing
-        (Dataman.Schema.Variant "Draft" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ])
-        [ Dataman.Schema.Variant "Published" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ]
-        , Dataman.Schema.Variant "Trashed" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ]
-        ]
+statusType : Dataman.Type.Type Status
+statusType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Meta" ] "Status"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Draft", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
+            , [ { name = Dataman.Type.VariantName "Published", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
+              , { name = Dataman.Type.VariantName "Trashed", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
+              ]
+            )
+        }
 
 
-timeCreatedSchema : Dataman.Schema.Schema TimeCreated
-timeCreatedSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Meta" ] "TimeCreated")
-        Nothing
-        (Dataman.Schema.Variant "TimeCreated" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ])
-        []
+timeCreatedType : Dataman.Type.Type TimeCreated
+timeCreatedType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Meta" ] "TimeCreated"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "TimeCreated", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
+            , []
+            )
+        }
 
 
-timeModifiedSchema : Dataman.Schema.Schema TimeModified
-timeModifiedSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Meta" ] "TimeModified")
-        Nothing
-        (Dataman.Schema.Variant "TimeModified" [ Dataman.Schema.toAny Dataman.Schema.Basics.time ])
-        []
+timeModifiedType : Dataman.Type.Type TimeModified
+timeModifiedType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Meta" ] "TimeModified"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "TimeModified", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
+            , []
+            )
+        }

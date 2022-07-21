@@ -1,8 +1,7 @@
 module ElmShop.Document.Review exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import ElmShop.Document.Type
 import ElmShop.Document.Utils.Meta
 import ElmShop.Document.Utils.Text
@@ -58,21 +57,28 @@ ratingCodec =
         )
 
 
-schema : Dataman.Schema.Schema Review
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Review" ] "Review"))
-        Nothing
-        [ Dataman.Schema.RecordField "order" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.orderSchema))
-        , Dataman.Schema.RecordField "product" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.productSchema))
-        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Text.schema)
-        , Dataman.Schema.RecordField "rating" (Dataman.Schema.toAny ratingSchema)
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        ]
+type_ : Dataman.Type.Type Review
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Review" ] "Review")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "order", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.orderType) }
+            , { name = Dataman.Type.FieldName "product", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.productType) }
+            , { name = Dataman.Type.FieldName "content", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Text.type_ }
+            , { name = Dataman.Type.FieldName "rating", type_ = Dataman.Type.toAny ratingType }
+            , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
+            ]
+        }
 
 
-ratingSchema : Dataman.Schema.Schema Rating
-ratingSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Review" ] "Rating")
-        Nothing
-        (Dataman.Schema.Variant "Rating" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
-        []
+ratingType : Dataman.Type.Type Rating
+ratingType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Review" ] "Rating"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Rating", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            , []
+            )
+        }

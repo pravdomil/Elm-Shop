@@ -1,8 +1,7 @@
 module ElmShop.Document.Shipping exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -101,39 +100,52 @@ translationCodec =
         |> Codec.buildRecord
 
 
-schema : Dataman.Schema.Schema Shipping
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Shipping"))
-        Nothing
-        [ Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
-        , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        ]
+type_ : Dataman.Type.Type Shipping
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Shipping" ] "Shipping")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) translationType) }
+            , { name = Dataman.Type.FieldName "type_", type_ = Dataman.Type.toAny typeType }
+            , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
+            ]
+        }
 
 
-translationSchema : Dataman.Schema.Schema Translation
-translationSchema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Translation"))
-        Nothing
-        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
-        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
-        ]
+translationType : Dataman.Type.Type Translation
+translationType =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Shipping" ] "Translation")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
+            , { name = Dataman.Type.FieldName "content", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Html.type_ }
+            ]
+        }
 
 
-typeSchema : Dataman.Schema.Schema Type
-typeSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Type")
-        Nothing
-        (Dataman.Schema.Variant "Basic_" [ Dataman.Schema.toAny basicSchema ])
-        []
+typeType : Dataman.Type.Type Type
+typeType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Shipping" ] "Type"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Basic_", arguments = [ Dataman.Type.toAny basicType ] }
+            , []
+            )
+        }
 
 
-basicSchema : Dataman.Schema.Schema Basic
-basicSchema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Shipping" ] "Basic"))
-        Nothing
-        [ Dataman.Schema.RecordField "price" (Dataman.Schema.toAny ElmShop.Document.Utils.Money.schema)
-        , Dataman.Schema.RecordField "minTotal" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Money.schema))
-        , Dataman.Schema.RecordField "maxTotal" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Money.schema))
-        , Dataman.Schema.RecordField "filter" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.CountryFilter.schema))
-        ]
+basicType : Dataman.Type.Type Basic
+basicType =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Shipping" ] "Basic")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "price", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Money.type_ }
+            , { name = Dataman.Type.FieldName "minTotal", type_ = Dataman.Type.toAny (Dataman.Type.maybe ElmShop.Document.Utils.Money.type_) }
+            , { name = Dataman.Type.FieldName "maxTotal", type_ = Dataman.Type.toAny (Dataman.Type.maybe ElmShop.Document.Utils.Money.type_) }
+            , { name = Dataman.Type.FieldName "filter", type_ = Dataman.Type.toAny (Dataman.Type.maybe ElmShop.Document.Utils.CountryFilter.type_) }
+            ]
+        }

@@ -1,8 +1,7 @@
 module ElmShop.Document.Language exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -74,28 +73,38 @@ translationCodec =
         |> Codec.buildRecord
 
 
-schema : Dataman.Schema.Schema Language
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Language" ] "Language"))
-        Nothing
-        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
-        , Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
-        , Dataman.Schema.RecordField "code" (Dataman.Schema.toAny codeSchema)
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        ]
+type_ : Dataman.Type.Type Language
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Language" ] "Language")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
+            , { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) translationType) }
+            , { name = Dataman.Type.FieldName "code", type_ = Dataman.Type.toAny codeType }
+            , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
+            ]
+        }
 
 
-translationSchema : Dataman.Schema.Schema Translation
-translationSchema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Language" ] "Translation"))
-        Nothing
-        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
-        ]
+translationType : Dataman.Type.Type Translation
+translationType =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Language" ] "Translation")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
+            ]
+        }
 
 
-codeSchema : Dataman.Schema.Schema Code
-codeSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Language" ] "Code")
-        Nothing
-        (Dataman.Schema.Variant "Code" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
-        []
+codeType : Dataman.Type.Type Code
+codeType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Language" ] "Code"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Code", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            , []
+            )
+        }

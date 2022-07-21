@@ -1,8 +1,7 @@
 module ElmShop.Document.User exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import ElmShop.Document.Type
 import ElmShop.Document.Utils.Email
 import ElmShop.Document.Utils.Meta
@@ -57,12 +56,15 @@ codec =
         |> Codec.buildRecord
 
 
-schema : Dataman.Schema.Schema User
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "User" ] "User"))
-        Nothing
-        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
-        , Dataman.Schema.RecordField "email" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Email.schema))
-        , Dataman.Schema.RecordField "password" (Dataman.Schema.toAny ElmShop.Document.Utils.Password.schema)
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        ]
+type_ : Dataman.Type.Type User
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "User" ] "User")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
+            , { name = Dataman.Type.FieldName "email", type_ = Dataman.Type.toAny (Dataman.Type.maybe ElmShop.Document.Utils.Email.type_) }
+            , { name = Dataman.Type.FieldName "password", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Password.type_ }
+            , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
+            ]
+        }

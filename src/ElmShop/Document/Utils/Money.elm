@@ -1,8 +1,7 @@
-module ElmShop.Document.Utils.Money exposing (DecimalPlaces, Money, codec, decimalPlacesCodec, decimalPlacesSchema, decimalPlacesToInt, fromInt, intToDecimalPlaces, schema, toInt)
+module ElmShop.Document.Utils.Money exposing (DecimalPlaces, Money, codec, decimalPlacesCodec, decimalPlacesToInt, decimalPlacesType, fromInt, intToDecimalPlaces, toInt, type_)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 
 
 type Money
@@ -85,17 +84,25 @@ codec =
         )
 
 
-schema : Dataman.Schema.Schema Money
-schema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Money" ] "Money")
-        Nothing
-        (Dataman.Schema.Variant "Money" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
-        []
+type_ : Dataman.Type.Type Money
+type_ =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Money" ] "Money"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Money", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            , []
+            )
+        }
 
 
-decimalPlacesSchema : Dataman.Schema.Schema DecimalPlaces
-decimalPlacesSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Money" ] "DecimalPlaces")
-        Nothing
-        (Dataman.Schema.Variant "DecimalPlaces" [ Dataman.Schema.toAny Dataman.Schema.Basics.int ])
-        []
+decimalPlacesType : Dataman.Type.Type DecimalPlaces
+decimalPlacesType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Money" ] "DecimalPlaces"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "DecimalPlaces", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            , []
+            )
+        }

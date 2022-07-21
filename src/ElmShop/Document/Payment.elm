@@ -1,8 +1,7 @@
 module ElmShop.Document.Payment exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -140,57 +139,76 @@ translationCodec =
         |> Codec.buildRecord
 
 
-schema : Dataman.Schema.Schema Payment
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Payment"))
-        Nothing
-        [ Dataman.Schema.RecordField "translations" (Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema) translationSchema))
-        , Dataman.Schema.RecordField "type_" (Dataman.Schema.toAny typeSchema)
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        ]
+type_ : Dataman.Type.Type Payment
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Payment" ] "Payment")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) translationType) }
+            , { name = Dataman.Type.FieldName "type_", type_ = Dataman.Type.toAny typeType }
+            , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
+            ]
+        }
 
 
-translationSchema : Dataman.Schema.Schema Translation
-translationSchema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Translation"))
-        Nothing
-        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
-        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
-        ]
+translationType : Dataman.Type.Type Translation
+translationType =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Payment" ] "Translation")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
+            , { name = Dataman.Type.FieldName "content", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Html.type_ }
+            ]
+        }
 
 
-typeSchema : Dataman.Schema.Schema Type
-typeSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Type")
-        Nothing
-        (Dataman.Schema.Variant "BankTransfer_" [ Dataman.Schema.toAny bankTransferSchema ])
-        [ Dataman.Schema.Variant "PayPal_" [ Dataman.Schema.toAny payPalSchema ]
-        , Dataman.Schema.Variant "Comgate_" [ Dataman.Schema.toAny comgateSchema ]
-        ]
+typeType : Dataman.Type.Type Type
+typeType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Payment" ] "Type"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "BankTransfer_", arguments = [ Dataman.Type.toAny bankTransferType ] }
+            , [ { name = Dataman.Type.VariantName "PayPal_", arguments = [ Dataman.Type.toAny payPalType ] }
+              , { name = Dataman.Type.VariantName "Comgate_", arguments = [ Dataman.Type.toAny comgateType ] }
+              ]
+            )
+        }
 
 
-bankTransferSchema : Dataman.Schema.Schema BankTransfer
-bankTransferSchema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "BankTransfer"))
-        Nothing
-        [ Dataman.Schema.RecordField "orderStatus" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.orderStatusSchema))
-        ]
+bankTransferType : Dataman.Type.Type BankTransfer
+bankTransferType =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Payment" ] "BankTransfer")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "orderStatus", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.orderStatusType) }
+            ]
+        }
 
 
-payPalSchema : Dataman.Schema.Schema PayPal
-payPalSchema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "PayPal"))
-        Nothing
-        [ Dataman.Schema.RecordField "email" (Dataman.Schema.toAny ElmShop.Document.Utils.Email.schema)
-        , Dataman.Schema.RecordField "test" (Dataman.Schema.toAny Dataman.Schema.Basics.bool)
-        ]
+payPalType : Dataman.Type.Type PayPal
+payPalType =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Payment" ] "PayPal")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "email", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Email.type_ }
+            , { name = Dataman.Type.FieldName "test", type_ = Dataman.Type.toAny Dataman.Type.bool }
+            ]
+        }
 
 
-comgateSchema : Dataman.Schema.Schema Comgate
-comgateSchema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Payment" ] "Comgate"))
-        Nothing
-        [ Dataman.Schema.RecordField "merchantId" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
-        , Dataman.Schema.RecordField "secret" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
-        , Dataman.Schema.RecordField "test" (Dataman.Schema.toAny Dataman.Schema.Basics.bool)
-        ]
+comgateType : Dataman.Type.Type Comgate
+comgateType =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Payment" ] "Comgate")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "merchantId", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            , { name = Dataman.Type.FieldName "secret", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            , { name = Dataman.Type.FieldName "test", type_ = Dataman.Type.toAny Dataman.Type.bool }
+            ]
+        }

@@ -1,8 +1,7 @@
 module ElmShop.Document.Utils.CountryFilter exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -30,10 +29,14 @@ codec =
         |> Codec.buildCustom
 
 
-schema : Dataman.Schema.Schema CountryFilter
-schema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "CountryFilter" ] "CountryFilter")
-        Nothing
-        (Dataman.Schema.Variant "Allow" [ Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.countrySchema) (Dataman.Schema.Tuple Nothing Nothing [])) ])
-        [ Dataman.Schema.Variant "Deny" [ Dataman.Schema.toAny (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.countrySchema) (Dataman.Schema.Tuple Nothing Nothing [])) ]
-        ]
+type_ : Dataman.Type.Type CountryFilter
+type_ =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "CountryFilter" ] "CountryFilter"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Allow", arguments = [ Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.countryType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) ] }
+            , [ { name = Dataman.Type.VariantName "Deny", arguments = [ Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.countryType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) ] }
+              ]
+            )
+        }

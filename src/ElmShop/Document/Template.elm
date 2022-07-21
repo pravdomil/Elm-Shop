@@ -1,8 +1,7 @@
 module ElmShop.Document.Template exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -75,37 +74,53 @@ contentCodec =
         )
 
 
-schema : Dataman.Schema.Schema Template
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Template" ] "Template"))
-        Nothing
-        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
-        , Dataman.Schema.RecordField "content" (Dataman.Schema.toAny contentSchema)
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        ]
+type_ : Dataman.Type.Type Template
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Template" ] "Template")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
+            , { name = Dataman.Type.FieldName "content", type_ = Dataman.Type.toAny contentType }
+            , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
+            ]
+        }
 
 
-contentSchema : Dataman.Schema.Schema Content
-contentSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Template" ] "Content")
-        Nothing
-        (Dataman.Schema.Variant "Universal"
-            [ Dataman.Schema.toAny
-                (Dataman.Schema.Record Nothing
-                    Nothing
-                    [ Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
+contentType : Dataman.Type.Type Content
+contentType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Template" ] "Content"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Universal"
+              , arguments =
+                    [ Dataman.Type.toAny
+                        (Dataman.Type.Record_
+                            { name = Nothing
+                            , documentation = Nothing
+                            , fields =
+                                [ { name = Dataman.Type.FieldName "content", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Html.type_ }
+                                ]
+                            }
+                        )
                     ]
-                )
-            ]
-        )
-        [ Dataman.Schema.Variant "Localized"
-            [ Dataman.Schema.toAny
-                (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema)
-                    (Dataman.Schema.Record Nothing
-                        Nothing
-                        [ Dataman.Schema.RecordField "content" (Dataman.Schema.toAny ElmShop.Document.Utils.Html.schema)
-                        ]
-                    )
-                )
-            ]
-        ]
+              }
+            , [ { name = Dataman.Type.VariantName "Localized"
+                , arguments =
+                    [ Dataman.Type.toAny
+                        ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType)
+                            (Dataman.Type.Record_
+                                { name = Nothing
+                                , documentation = Nothing
+                                , fields =
+                                    [ { name = Dataman.Type.FieldName "content", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Html.type_ }
+                                    ]
+                                }
+                            )
+                        )
+                    ]
+                }
+              ]
+            )
+        }

@@ -1,7 +1,7 @@
 module ElmShop.Document exposing (..)
 
 import Codec
-import Dataman.Schema
+import Dataman.Type
 import ElmShop.Document.Attribute
 import ElmShop.Document.Category
 import ElmShop.Document.Country
@@ -352,27 +352,31 @@ msgCodec =
         )
 
 
-schema : Dataman.Schema.Schema Document
-schema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document" ] "Document")
-        Nothing
-        (Dataman.Schema.Variant "Attribute" [ Dataman.Schema.toAny ElmShop.Document.Attribute.schema ])
-        [ Dataman.Schema.Variant "Category" [ Dataman.Schema.toAny ElmShop.Document.Category.schema ]
-        , Dataman.Schema.Variant "Country" [ Dataman.Schema.toAny ElmShop.Document.Country.schema ]
-        , Dataman.Schema.Variant "Currency" [ Dataman.Schema.toAny ElmShop.Document.Currency.schema ]
-        , Dataman.Schema.Variant "File" [ Dataman.Schema.toAny ElmShop.Document.File.schema ]
-        , Dataman.Schema.Variant "Language" [ Dataman.Schema.toAny ElmShop.Document.Language.schema ]
-        , Dataman.Schema.Variant "Message" [ Dataman.Schema.toAny ElmShop.Document.Message.schema ]
-        , Dataman.Schema.Variant "Order" [ Dataman.Schema.toAny ElmShop.Document.Order.schema ]
-        , Dataman.Schema.Variant "OrderStatus" [ Dataman.Schema.toAny ElmShop.Document.OrderStatus.schema ]
-        , Dataman.Schema.Variant "Page" [ Dataman.Schema.toAny ElmShop.Document.Page.schema ]
-        , Dataman.Schema.Variant "Payment" [ Dataman.Schema.toAny ElmShop.Document.Payment.schema ]
-        , Dataman.Schema.Variant "Product" [ Dataman.Schema.toAny ElmShop.Document.Product.schema ]
-        , Dataman.Schema.Variant "Review" [ Dataman.Schema.toAny ElmShop.Document.Review.schema ]
-        , Dataman.Schema.Variant "Session" [ Dataman.Schema.toAny ElmShop.Document.Session.schema ]
-        , Dataman.Schema.Variant "Shipping" [ Dataman.Schema.toAny ElmShop.Document.Shipping.schema ]
-        , Dataman.Schema.Variant "Site" [ Dataman.Schema.toAny ElmShop.Document.Site.schema ]
-        , Dataman.Schema.Variant "Template" [ Dataman.Schema.toAny ElmShop.Document.Template.schema ]
-        , Dataman.Schema.Variant "User" [ Dataman.Schema.toAny ElmShop.Document.User.schema ]
-        , Dataman.Schema.Variant "Warehouse" [ Dataman.Schema.toAny ElmShop.Document.Warehouse.schema ]
-        ]
+type_ : Dataman.Type.Type Document
+type_ =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document" ] "Document"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Attribute", arguments = [ Dataman.Type.toAny ElmShop.Document.Attribute.type_ ] }
+            , [ { name = Dataman.Type.VariantName "Category", arguments = [ Dataman.Type.toAny ElmShop.Document.Category.type_ ] }
+              , { name = Dataman.Type.VariantName "Country", arguments = [ Dataman.Type.toAny ElmShop.Document.Country.type_ ] }
+              , { name = Dataman.Type.VariantName "Currency", arguments = [ Dataman.Type.toAny ElmShop.Document.Currency.type_ ] }
+              , { name = Dataman.Type.VariantName "File", arguments = [ Dataman.Type.toAny ElmShop.Document.File.type_ ] }
+              , { name = Dataman.Type.VariantName "Language", arguments = [ Dataman.Type.toAny ElmShop.Document.Language.type_ ] }
+              , { name = Dataman.Type.VariantName "Message", arguments = [ Dataman.Type.toAny ElmShop.Document.Message.type_ ] }
+              , { name = Dataman.Type.VariantName "Order", arguments = [ Dataman.Type.toAny ElmShop.Document.Order.type_ ] }
+              , { name = Dataman.Type.VariantName "OrderStatus", arguments = [ Dataman.Type.toAny ElmShop.Document.OrderStatus.type_ ] }
+              , { name = Dataman.Type.VariantName "Page", arguments = [ Dataman.Type.toAny ElmShop.Document.Page.type_ ] }
+              , { name = Dataman.Type.VariantName "Payment", arguments = [ Dataman.Type.toAny ElmShop.Document.Payment.type_ ] }
+              , { name = Dataman.Type.VariantName "Product", arguments = [ Dataman.Type.toAny ElmShop.Document.Product.type_ ] }
+              , { name = Dataman.Type.VariantName "Review", arguments = [ Dataman.Type.toAny ElmShop.Document.Review.type_ ] }
+              , { name = Dataman.Type.VariantName "Session", arguments = [ Dataman.Type.toAny ElmShop.Document.Session.type_ ] }
+              , { name = Dataman.Type.VariantName "Shipping", arguments = [ Dataman.Type.toAny ElmShop.Document.Shipping.type_ ] }
+              , { name = Dataman.Type.VariantName "Site", arguments = [ Dataman.Type.toAny ElmShop.Document.Site.type_ ] }
+              , { name = Dataman.Type.VariantName "Template", arguments = [ Dataman.Type.toAny ElmShop.Document.Template.type_ ] }
+              , { name = Dataman.Type.VariantName "User", arguments = [ Dataman.Type.toAny ElmShop.Document.User.type_ ] }
+              , { name = Dataman.Type.VariantName "Warehouse", arguments = [ Dataman.Type.toAny ElmShop.Document.Warehouse.type_ ] }
+              ]
+            )
+        }

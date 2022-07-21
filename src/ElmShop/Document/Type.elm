@@ -1,6 +1,6 @@
 module ElmShop.Document.Type exposing (..)
 
-import Dataman.Schema
+import Dataman.Type
 
 
 type Type
@@ -109,153 +109,229 @@ type Warehouse
 --
 
 
-attributeSchema : Dataman.Schema.Schema Attribute
-attributeSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Attribute")
-        Nothing
-        (Dataman.Schema.Variant "Attribute" [])
-        []
+attributeType : Dataman.Type.Type Attribute
+attributeType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Attribute"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Attribute", arguments = [] }
+            , []
+            )
+        }
 
 
-categorySchema : Dataman.Schema.Schema Category
-categorySchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Category")
-        Nothing
-        (Dataman.Schema.Variant "Category" [])
-        []
+categoryType : Dataman.Type.Type Category
+categoryType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Category"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Category", arguments = [] }
+            , []
+            )
+        }
 
 
-countrySchema : Dataman.Schema.Schema Country
-countrySchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Country")
-        Nothing
-        (Dataman.Schema.Variant "Country" [])
-        []
+countryType : Dataman.Type.Type Country
+countryType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Country"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Country", arguments = [] }
+            , []
+            )
+        }
 
 
-currencySchema : Dataman.Schema.Schema Currency
-currencySchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Currency")
-        Nothing
-        (Dataman.Schema.Variant "Currency" [])
-        []
+currencyType : Dataman.Type.Type Currency
+currencyType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Currency"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Currency", arguments = [] }
+            , []
+            )
+        }
 
 
-fileSchema : Dataman.Schema.Schema File
-fileSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "File")
-        Nothing
-        (Dataman.Schema.Variant "File" [])
-        []
+fileType : Dataman.Type.Type File
+fileType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "File"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "File", arguments = [] }
+            , []
+            )
+        }
 
 
-languageSchema : Dataman.Schema.Schema Language
-languageSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Language")
-        Nothing
-        (Dataman.Schema.Variant "Language" [])
-        []
+languageType : Dataman.Type.Type Language
+languageType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Language"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Language", arguments = [] }
+            , []
+            )
+        }
 
 
-messageSchema : Dataman.Schema.Schema Message
-messageSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Message")
-        Nothing
-        (Dataman.Schema.Variant "Message" [])
-        []
+messageType : Dataman.Type.Type Message
+messageType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Message"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Message", arguments = [] }
+            , []
+            )
+        }
 
 
-orderSchema : Dataman.Schema.Schema Order
-orderSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Order")
-        Nothing
-        (Dataman.Schema.Variant "Order" [])
-        []
+orderType : Dataman.Type.Type Order
+orderType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Order"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Order", arguments = [] }
+            , []
+            )
+        }
 
 
-orderStatusSchema : Dataman.Schema.Schema OrderStatus
-orderStatusSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "OrderStatus")
-        Nothing
-        (Dataman.Schema.Variant "OrderStatus" [])
-        []
+orderStatusType : Dataman.Type.Type OrderStatus
+orderStatusType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "OrderStatus"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "OrderStatus", arguments = [] }
+            , []
+            )
+        }
 
 
-pageSchema : Dataman.Schema.Schema Page
-pageSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Page")
-        Nothing
-        (Dataman.Schema.Variant "Page" [])
-        []
+pageType : Dataman.Type.Type Page
+pageType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Page"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Page", arguments = [] }
+            , []
+            )
+        }
 
 
-paymentSchema : Dataman.Schema.Schema Payment
-paymentSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Payment")
-        Nothing
-        (Dataman.Schema.Variant "Payment" [])
-        []
+paymentType : Dataman.Type.Type Payment
+paymentType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Payment"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Payment", arguments = [] }
+            , []
+            )
+        }
 
 
-productSchema : Dataman.Schema.Schema Product
-productSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Product")
-        Nothing
-        (Dataman.Schema.Variant "Product" [])
-        []
+productType : Dataman.Type.Type Product
+productType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Product"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Product", arguments = [] }
+            , []
+            )
+        }
 
 
-reviewSchema : Dataman.Schema.Schema Review
-reviewSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Review")
-        Nothing
-        (Dataman.Schema.Variant "Review" [])
-        []
+reviewType : Dataman.Type.Type Review
+reviewType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Review"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Review", arguments = [] }
+            , []
+            )
+        }
 
 
-sessionSchema : Dataman.Schema.Schema Session
-sessionSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Session")
-        Nothing
-        (Dataman.Schema.Variant "Session" [])
-        []
+sessionType : Dataman.Type.Type Session
+sessionType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Session"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Session", arguments = [] }
+            , []
+            )
+        }
 
 
-shippingSchema : Dataman.Schema.Schema Shipping
-shippingSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Shipping")
-        Nothing
-        (Dataman.Schema.Variant "Shipping" [])
-        []
+shippingType : Dataman.Type.Type Shipping
+shippingType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Shipping"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Shipping", arguments = [] }
+            , []
+            )
+        }
 
 
-siteSchema : Dataman.Schema.Schema Site
-siteSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Site")
-        Nothing
-        (Dataman.Schema.Variant "Site" [])
-        []
+siteType : Dataman.Type.Type Site
+siteType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Site"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Site", arguments = [] }
+            , []
+            )
+        }
 
 
-templateSchema : Dataman.Schema.Schema Template
-templateSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Template")
-        Nothing
-        (Dataman.Schema.Variant "Template" [])
-        []
+templateType : Dataman.Type.Type Template
+templateType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Template"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Template", arguments = [] }
+            , []
+            )
+        }
 
 
-userSchema : Dataman.Schema.Schema User
-userSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "User")
-        Nothing
-        (Dataman.Schema.Variant "User" [])
-        []
+userType : Dataman.Type.Type User
+userType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "User"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "User", arguments = [] }
+            , []
+            )
+        }
 
 
-warehouseSchema : Dataman.Schema.Schema Warehouse
-warehouseSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Type" ] "Warehouse")
-        Nothing
-        (Dataman.Schema.Variant "Warehouse" [])
-        []
+warehouseType : Dataman.Type.Type Warehouse
+warehouseType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Type" ] "Warehouse"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Warehouse", arguments = [] }
+            , []
+            )
+        }

@@ -1,8 +1,7 @@
 module ElmShop.Document.Utils.AttributeValue exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import ElmShop.Document.Type
 import Reference
 
@@ -38,25 +37,38 @@ codec =
         |> Codec.buildCustom
 
 
-schema : Dataman.Schema.Schema AttributeValue
-schema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "AttributeValue" ] "AttributeValue")
-        Nothing
-        (Dataman.Schema.Variant "StringValue"
-            [ Dataman.Schema.toAny
-                (Dataman.Schema.Record Nothing
-                    Nothing
-                    [ Dataman.Schema.RecordField "value" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
+type_ : Dataman.Type.Type AttributeValue
+type_ =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "AttributeValue" ] "AttributeValue"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "StringValue"
+              , arguments =
+                    [ Dataman.Type.toAny
+                        (Dataman.Type.Record_
+                            { name = Nothing
+                            , documentation = Nothing
+                            , fields =
+                                [ { name = Dataman.Type.FieldName "value", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+                                ]
+                            }
+                        )
                     ]
-                )
-            ]
-        )
-        [ Dataman.Schema.Variant "AttributeValue"
-            [ Dataman.Schema.toAny
-                (Dataman.Schema.Record Nothing
-                    Nothing
-                    [ Dataman.Schema.RecordField "value" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.attributeSchema))
+              }
+            , [ { name = Dataman.Type.VariantName "AttributeValue"
+                , arguments =
+                    [ Dataman.Type.toAny
+                        (Dataman.Type.Record_
+                            { name = Nothing
+                            , documentation = Nothing
+                            , fields =
+                                [ { name = Dataman.Type.FieldName "value", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.attributeType) }
+                                ]
+                            }
+                        )
                     ]
-                )
-            ]
-        ]
+                }
+              ]
+            )
+        }

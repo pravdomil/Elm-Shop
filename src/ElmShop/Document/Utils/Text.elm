@@ -1,8 +1,7 @@
-module ElmShop.Document.Utils.Text exposing (Text, codec, fromString, schema, toString)
+module ElmShop.Document.Utils.Text exposing (Text, codec, fromString, toString, type_)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 
 
 type Text
@@ -31,9 +30,13 @@ codec =
         |> Codec.buildCustom
 
 
-schema : Dataman.Schema.Schema Text
-schema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Text" ] "Text")
-        Nothing
-        (Dataman.Schema.Variant "Text" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
-        []
+type_ : Dataman.Type.Type Text
+type_ =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Text" ] "Text"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Text", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            , []
+            )
+        }

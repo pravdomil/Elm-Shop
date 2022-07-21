@@ -1,8 +1,7 @@
 module ElmShop.Document.Utils.Address exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import ElmShop.Document.Type
 import Reference
 
@@ -36,15 +35,18 @@ codec =
         |> Codec.buildRecord
 
 
-schema : Dataman.Schema.Schema Address
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Utils", "Address" ] "Address"))
-        (Just (Dataman.Schema.Documentation "More information:\\n<https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fe-autocomplete-organization>\\n<https://developers.google.com/web/updates/2015/06/checkout-faster-with-autofill#address>\\n<https://developers.google.com/web/fundamentals/design-and-ux/input/forms#recommended_input_name_and_autocomplete_attribute_values>"))
-        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
-        , Dataman.Schema.RecordField "organization" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
-        , Dataman.Schema.RecordField "address1" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
-        , Dataman.Schema.RecordField "address2" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
-        , Dataman.Schema.RecordField "city" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
-        , Dataman.Schema.RecordField "postcode" (Dataman.Schema.toAny Dataman.Schema.Basics.string)
-        , Dataman.Schema.RecordField "state" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.countrySchema))
-        ]
+type_ : Dataman.Type.Type Address
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Address" ] "Address")
+        , documentation = Just (Dataman.Type.Documentation "More information:\\n<https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fe-autocomplete-organization>\\n<https://developers.google.com/web/updates/2015/06/checkout-faster-with-autofill#address>\\n<https://developers.google.com/web/fundamentals/design-and-ux/input/forms#recommended_input_name_and_autocomplete_attribute_values>")
+        , fields =
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            , { name = Dataman.Type.FieldName "organization", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            , { name = Dataman.Type.FieldName "address1", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            , { name = Dataman.Type.FieldName "address2", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            , { name = Dataman.Type.FieldName "city", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            , { name = Dataman.Type.FieldName "postcode", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            , { name = Dataman.Type.FieldName "state", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.countryType) }
+            ]
+        }

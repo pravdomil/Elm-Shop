@@ -1,8 +1,7 @@
 module ElmShop.Document.Site exposing (..)
 
 import Codec
-import Dataman.Schema
-import Dataman.Schema.Basics
+import Dataman.Type
 import Dict.Any
 import Dict.Any.Codec
 import ElmShop.Document.Type
@@ -148,65 +147,87 @@ urlCodec =
         )
 
 
-schema : Dataman.Schema.Schema Site
-schema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Site"))
-        Nothing
-        [ Dataman.Schema.RecordField "name" (Dataman.Schema.toAny ElmShop.Document.Utils.Name.schema)
-        , Dataman.Schema.RecordField "url" (Dataman.Schema.toAny urlSchema)
-        , Dataman.Schema.RecordField "description" (Dataman.Schema.toAny descriptionSchema)
-        , Dataman.Schema.RecordField "contact" (Dataman.Schema.toAny contactSchema)
-        , Dataman.Schema.RecordField "language" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.languageSchema))
-        , Dataman.Schema.RecordField "homePage" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.pageSchema))
-        , Dataman.Schema.RecordField "currency" (Dataman.Schema.toAny (Dataman.Schema.Basics.reference ElmShop.Document.Type.currencySchema))
-        , Dataman.Schema.RecordField "logo" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.fileSchema)))
-        , Dataman.Schema.RecordField "icon" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.fileSchema)))
-        , Dataman.Schema.RecordField "header"
-            (Dataman.Schema.toAny
-                (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.pageSchema)
-                    (Dataman.Schema.Record Nothing
-                        Nothing
-                        [ Dataman.Schema.RecordField "order" (Dataman.Schema.toAny ElmShop.Document.Utils.Order.schema)
-                        ]
-                    )
-                )
+type_ : Dataman.Type.Type Site
+type_ =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Site" ] "Site")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
+            , { name = Dataman.Type.FieldName "url", type_ = Dataman.Type.toAny urlType }
+            , { name = Dataman.Type.FieldName "description", type_ = Dataman.Type.toAny descriptionType }
+            , { name = Dataman.Type.FieldName "contact", type_ = Dataman.Type.toAny contactType }
+            , { name = Dataman.Type.FieldName "language", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) }
+            , { name = Dataman.Type.FieldName "homePage", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.pageType) }
+            , { name = Dataman.Type.FieldName "currency", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.currencyType) }
+            , { name = Dataman.Type.FieldName "logo", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.fileType)) }
+            , { name = Dataman.Type.FieldName "icon", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.fileType)) }
+            , { name = Dataman.Type.FieldName "header"
+              , type_ =
+                    Dataman.Type.toAny
+                        ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.pageType)
+                            (Dataman.Type.Record_
+                                { name = Nothing
+                                , documentation = Nothing
+                                , fields =
+                                    [ { name = Dataman.Type.FieldName "order", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Order.type_ }
+                                    ]
+                                }
+                            )
+                        )
+              }
+            , { name = Dataman.Type.FieldName "footer"
+              , type_ =
+                    Dataman.Type.toAny
+                        ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.pageType)
+                            (Dataman.Type.Record_
+                                { name = Nothing
+                                , documentation = Nothing
+                                , fields =
+                                    [ { name = Dataman.Type.FieldName "order", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Order.type_ }
+                                    ]
+                                }
+                            )
+                        )
+              }
+            , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
+            ]
+        }
+
+
+urlType : Dataman.Type.Type Url
+urlType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Site" ] "Url"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Url", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            , []
             )
-        , Dataman.Schema.RecordField "footer"
-            (Dataman.Schema.toAny
-                (Dataman.Schema.Basics.anyDict (Dataman.Schema.Basics.reference ElmShop.Document.Type.pageSchema)
-                    (Dataman.Schema.Record Nothing
-                        Nothing
-                        [ Dataman.Schema.RecordField "order" (Dataman.Schema.toAny ElmShop.Document.Utils.Order.schema)
-                        ]
-                    )
-                )
+        }
+
+
+descriptionType : Dataman.Type.Type Description
+descriptionType =
+    Dataman.Type.Custom_
+        { name = Dataman.Type.Name [ "ElmShop", "Document", "Site" ] "Description"
+        , documentation = Nothing
+        , variants =
+            ( { name = Dataman.Type.VariantName "Description", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            , []
             )
-        , Dataman.Schema.RecordField "meta" (Dataman.Schema.toAny ElmShop.Document.Utils.Meta.schema)
-        ]
+        }
 
 
-urlSchema : Dataman.Schema.Schema Url
-urlSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Url")
-        Nothing
-        (Dataman.Schema.Variant "Url" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
-        []
-
-
-descriptionSchema : Dataman.Schema.Schema Description
-descriptionSchema =
-    Dataman.Schema.CustomType (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Description")
-        Nothing
-        (Dataman.Schema.Variant "Description" [ Dataman.Schema.toAny Dataman.Schema.Basics.string ])
-        []
-
-
-contactSchema : Dataman.Schema.Schema Contact
-contactSchema =
-    Dataman.Schema.Record (Just (Dataman.Schema.Name [ "ElmShop", "Document", "Site" ] "Contact"))
-        Nothing
-        [ Dataman.Schema.RecordField "email" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Email.schema))
-        , Dataman.Schema.RecordField "phone" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Phone.schema))
-        , Dataman.Schema.RecordField "note" (Dataman.Schema.toAny ElmShop.Document.Utils.Note.schema)
-        , Dataman.Schema.RecordField "address" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe ElmShop.Document.Utils.Address.schema))
-        ]
+contactType : Dataman.Type.Type Contact
+contactType =
+    Dataman.Type.Record_
+        { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Site" ] "Contact")
+        , documentation = Nothing
+        , fields =
+            [ { name = Dataman.Type.FieldName "email", type_ = Dataman.Type.toAny (Dataman.Type.maybe ElmShop.Document.Utils.Email.type_) }
+            , { name = Dataman.Type.FieldName "phone", type_ = Dataman.Type.toAny (Dataman.Type.maybe ElmShop.Document.Utils.Phone.type_) }
+            , { name = Dataman.Type.FieldName "note", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Note.type_ }
+            , { name = Dataman.Type.FieldName "address", type_ = Dataman.Type.toAny (Dataman.Type.maybe ElmShop.Document.Utils.Address.type_) }
+            ]
+        }
