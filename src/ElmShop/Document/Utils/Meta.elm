@@ -6,7 +6,7 @@ import Dataman.Schema.Basics
 import ElmShop.Document.Type
 import ElmShop.Document.Utils.Note
 import ElmShop.Document.Utils.Order
-import Id
+import Reference
 import Task
 import Task.Extra
 import Time
@@ -17,7 +17,7 @@ type alias Meta =
     { status : Status
     , created : TimeCreated
     , modified : TimeModified
-    , author : Maybe (Id.Id ElmShop.Document.Type.User)
+    , author : Maybe (Reference.Reference ElmShop.Document.Type.User)
 
     --
     , order : ElmShop.Document.Utils.Order.Order
@@ -78,7 +78,7 @@ codec =
         |> Codec.field "status" .status statusCodec
         |> Codec.field "created" .created timeCreatedCodec
         |> Codec.field "modified" .modified timeModifiedCodec
-        |> Codec.field "author" .author (Codec.maybe Id.codec)
+        |> Codec.field "author" .author (Codec.maybe Reference.codec)
         |> Codec.field "order" .order ElmShop.Document.Utils.Order.codec
         |> Codec.field "note" .note ElmShop.Document.Utils.Note.codec
         |> Codec.buildRecord
@@ -135,7 +135,7 @@ schema =
         [ Dataman.Schema.RecordField "status" (Dataman.Schema.toAny statusSchema)
         , Dataman.Schema.RecordField "created" (Dataman.Schema.toAny timeCreatedSchema)
         , Dataman.Schema.RecordField "modified" (Dataman.Schema.toAny timeModifiedSchema)
-        , Dataman.Schema.RecordField "author" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.id ElmShop.Document.Type.userSchema)))
+        , Dataman.Schema.RecordField "author" (Dataman.Schema.toAny (Dataman.Schema.Basics.maybe (Dataman.Schema.Basics.reference ElmShop.Document.Type.userSchema)))
         , Dataman.Schema.RecordField "order" (Dataman.Schema.toAny ElmShop.Document.Utils.Order.schema)
         , Dataman.Schema.RecordField "note" (Dataman.Schema.toAny ElmShop.Document.Utils.Note.schema)
         ]
