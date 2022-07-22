@@ -44,10 +44,10 @@ type Code
 codec : Codec.Codec Language
 codec =
     Codec.record (\x1 x2 x3 x4 -> { name = x1, translations = x2, code = x3, meta = x4 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "code" .code codeCodec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field .code codeCodec
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -61,7 +61,7 @@ codeCodec =
                         Code x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Code" Code Codec.string
+                |> Codec.variant1 Code Codec.string
                 |> Codec.buildCustom
         )
 
@@ -69,7 +69,7 @@ codeCodec =
 translationCodec : Codec.Codec Translation
 translationCodec =
     Codec.record (\x1 -> { name = x1 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
         |> Codec.buildRecord
 
 

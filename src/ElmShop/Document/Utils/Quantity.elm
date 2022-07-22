@@ -30,8 +30,7 @@ codec =
                 Quantity x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "Quantity"
-            Quantity
+        |> Codec.variant1 Quantity
             (Codec.int
                 |> Codec.andThen
                     identity

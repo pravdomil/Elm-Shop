@@ -76,44 +76,44 @@ type alias Contact =
 codec : Codec.Codec Site
 codec =
     Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 -> { name = x1, url = x2, description = x3, contact = x4, language = x5, homePage = x6, currency = x7, logo = x8, icon = x9, header = x10, footer = x11, meta = x12 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "url" .url urlCodec
-        |> Codec.field "description" .description descriptionCodec
-        |> Codec.field "contact" .contact contactCodec
-        |> Codec.field "language" .language Reference.codec
-        |> Codec.field "homePage" .homePage Reference.codec
-        |> Codec.field "currency" .currency Reference.codec
-        |> Codec.field "logo" .logo (Codec.maybe Reference.codec)
-        |> Codec.field "icon" .icon (Codec.maybe Reference.codec)
-        |> Codec.field "header"
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .url urlCodec
+        |> Codec.field .description descriptionCodec
+        |> Codec.field .contact contactCodec
+        |> Codec.field .language Reference.codec
+        |> Codec.field .homePage Reference.codec
+        |> Codec.field .currency Reference.codec
+        |> Codec.field .logo (Codec.maybe Reference.codec)
+        |> Codec.field .icon (Codec.maybe Reference.codec)
+        |> Codec.field
             .header
             (Dict.Any.Codec.dict Reference.toString
                 Reference.codec
                 (Codec.record (\x1 -> { order = x1 })
-                    |> Codec.field "order" .order ElmShop.Document.Utils.Order.codec
+                    |> Codec.field .order ElmShop.Document.Utils.Order.codec
                     |> Codec.buildRecord
                 )
             )
-        |> Codec.field "footer"
+        |> Codec.field
             .footer
             (Dict.Any.Codec.dict Reference.toString
                 Reference.codec
                 (Codec.record (\x1 -> { order = x1 })
-                    |> Codec.field "order" .order ElmShop.Document.Utils.Order.codec
+                    |> Codec.field .order ElmShop.Document.Utils.Order.codec
                     |> Codec.buildRecord
                 )
             )
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
 contactCodec : Codec.Codec Contact
 contactCodec =
     Codec.record (\x1 x2 x3 x4 -> { email = x1, phone = x2, note = x3, address = x4 })
-        |> Codec.field "email" .email (Codec.maybe ElmShop.Document.Utils.Email.codec)
-        |> Codec.field "phone" .phone (Codec.maybe ElmShop.Document.Utils.Phone.codec)
-        |> Codec.field "note" .note ElmShop.Document.Utils.Note.codec
-        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
+        |> Codec.field .email (Codec.maybe ElmShop.Document.Utils.Email.codec)
+        |> Codec.field .phone (Codec.maybe ElmShop.Document.Utils.Phone.codec)
+        |> Codec.field .note ElmShop.Document.Utils.Note.codec
+        |> Codec.field .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
         |> Codec.buildRecord
 
 
@@ -127,7 +127,7 @@ descriptionCodec =
                         Description x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Description" Description Codec.string
+                |> Codec.variant1 Description Codec.string
                 |> Codec.buildCustom
         )
 
@@ -142,7 +142,7 @@ urlCodec =
                         Url x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Url" Url Codec.string
+                |> Codec.variant1 Url Codec.string
                 |> Codec.buildCustom
         )
 

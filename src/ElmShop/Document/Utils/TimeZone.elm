@@ -38,7 +38,7 @@ codec =
                 TimeZone x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "TimeZone" TimeZone Codec.int
+        |> Codec.variant1 TimeZone Codec.int
         |> Codec.buildCustom
 
 

@@ -26,7 +26,7 @@ codec =
                 Text x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "Text" Text Codec.string
+        |> Codec.variant1 Text Codec.string
         |> Codec.buildCustom
 
 

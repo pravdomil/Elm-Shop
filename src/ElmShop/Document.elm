@@ -307,25 +307,25 @@ codec =
                 Warehouse x1 ->
                     fn19 x1
         )
-        |> Codec.variant1 "Attribute" Attribute ElmShop.Document.Attribute.codec
-        |> Codec.variant1 "Category" Category ElmShop.Document.Category.codec
-        |> Codec.variant1 "Country" Country ElmShop.Document.Country.codec
-        |> Codec.variant1 "Currency" Currency ElmShop.Document.Currency.codec
-        |> Codec.variant1 "File" File ElmShop.Document.File.codec
-        |> Codec.variant1 "Language" Language ElmShop.Document.Language.codec
-        |> Codec.variant1 "Message" Message ElmShop.Document.Message.codec
-        |> Codec.variant1 "Order" Order ElmShop.Document.Order.codec
-        |> Codec.variant1 "OrderStatus" OrderStatus ElmShop.Document.OrderStatus.codec
-        |> Codec.variant1 "Page" Page ElmShop.Document.Page.codec
-        |> Codec.variant1 "Payment" Payment ElmShop.Document.Payment.codec
-        |> Codec.variant1 "Product" Product ElmShop.Document.Product.codec
-        |> Codec.variant1 "Review" Review ElmShop.Document.Review.codec
-        |> Codec.variant1 "Session" Session ElmShop.Document.Session.codec
-        |> Codec.variant1 "Shipping" Shipping ElmShop.Document.Shipping.codec
-        |> Codec.variant1 "Site" Site ElmShop.Document.Site.codec
-        |> Codec.variant1 "Template" Template ElmShop.Document.Template.codec
-        |> Codec.variant1 "User" User ElmShop.Document.User.codec
-        |> Codec.variant1 "Warehouse" Warehouse ElmShop.Document.Warehouse.codec
+        |> Codec.variant1 Attribute ElmShop.Document.Attribute.codec
+        |> Codec.variant1 Category ElmShop.Document.Category.codec
+        |> Codec.variant1 Country ElmShop.Document.Country.codec
+        |> Codec.variant1 Currency ElmShop.Document.Currency.codec
+        |> Codec.variant1 File ElmShop.Document.File.codec
+        |> Codec.variant1 Language ElmShop.Document.Language.codec
+        |> Codec.variant1 Message ElmShop.Document.Message.codec
+        |> Codec.variant1 Order ElmShop.Document.Order.codec
+        |> Codec.variant1 OrderStatus ElmShop.Document.OrderStatus.codec
+        |> Codec.variant1 Page ElmShop.Document.Page.codec
+        |> Codec.variant1 Payment ElmShop.Document.Payment.codec
+        |> Codec.variant1 Product ElmShop.Document.Product.codec
+        |> Codec.variant1 Review ElmShop.Document.Review.codec
+        |> Codec.variant1 Session ElmShop.Document.Session.codec
+        |> Codec.variant1 Shipping ElmShop.Document.Shipping.codec
+        |> Codec.variant1 Site ElmShop.Document.Site.codec
+        |> Codec.variant1 Template ElmShop.Document.Template.codec
+        |> Codec.variant1 User ElmShop.Document.User.codec
+        |> Codec.variant1 Warehouse ElmShop.Document.Warehouse.codec
         |> Codec.buildCustom
 
 
@@ -345,9 +345,9 @@ msgCodec =
                         AttachUserToSession x1 x2 ->
                             fn3 x1 x2
                 )
-                |> Codec.variant1 "Create" Create (Codec.tuple Id.codec codec)
-                |> Codec.variant1 "Remove" Remove Id.codec
-                |> Codec.variant2 "AttachUserToSession" AttachUserToSession (Codec.maybe Id.codec) Id.codec
+                |> Codec.variant1 Create (Codec.tuple Id.codec codec)
+                |> Codec.variant1 Remove Id.codec
+                |> Codec.variant2 AttachUserToSession (Codec.maybe Id.codec) Id.codec
                 |> Codec.buildCustom
         )
 

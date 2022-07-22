@@ -36,17 +36,17 @@ type alias Translation =
 codec : Codec.Codec Attribute
 codec =
     Codec.record (\x1 x2 x3 x4 -> { translations = x1, parent = x2, image = x3, meta = x4 })
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "parent" .parent (Codec.maybe Reference.codec)
-        |> Codec.field "image" .image (Codec.maybe Reference.codec)
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field .parent (Codec.maybe Reference.codec)
+        |> Codec.field .image (Codec.maybe Reference.codec)
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
 translationCodec : Codec.Codec Translation
 translationCodec =
     Codec.record (\x1 -> { name = x1 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
         |> Codec.buildRecord
 
 

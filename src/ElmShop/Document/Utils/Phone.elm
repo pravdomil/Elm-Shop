@@ -30,8 +30,7 @@ codec =
                 Phone x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "Phone"
-            Phone
+        |> Codec.variant1 Phone
             (Codec.string
                 |> Codec.andThen
                     identity

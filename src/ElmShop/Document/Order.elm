@@ -185,27 +185,27 @@ type MessageNotification
 codec : Codec.Codec Order
 codec =
     Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 -> { number = x1, client = x2, billing = x3, site = x4, language = x5, currency = x6, cart = x7, shipping = x8, payments = x9, messages = x10, meta = x11 })
-        |> Codec.field "number" .number numberCodec
-        |> Codec.field "client" .client clientCodec
-        |> Codec.field "billing" .billing billingCodec
-        |> Codec.field "site" .site Reference.codec
-        |> Codec.field "language" .language Reference.codec
-        |> Codec.field "currency" .currency currencyCodec
-        |> Codec.field "cart" .cart (Dict.Any.Codec.dict Id.toString Id.codec cartItemCodec)
-        |> Codec.field "shipping" .shipping (Dict.Any.Codec.dict Id.toString Id.codec shippingCodec)
-        |> Codec.field "payments" .payments (Dict.Any.Codec.dict Id.toString Id.codec paymentCodec)
-        |> Codec.field "messages" .messages (Dict.Any.Codec.dict Id.toString Id.codec messageCodec)
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .number numberCodec
+        |> Codec.field .client clientCodec
+        |> Codec.field .billing billingCodec
+        |> Codec.field .site Reference.codec
+        |> Codec.field .language Reference.codec
+        |> Codec.field .currency currencyCodec
+        |> Codec.field .cart (Dict.Any.Codec.dict Id.toString Id.codec cartItemCodec)
+        |> Codec.field .shipping (Dict.Any.Codec.dict Id.toString Id.codec shippingCodec)
+        |> Codec.field .payments (Dict.Any.Codec.dict Id.toString Id.codec paymentCodec)
+        |> Codec.field .messages (Dict.Any.Codec.dict Id.toString Id.codec messageCodec)
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
 messageCodec : Codec.Codec Message
 messageCodec =
     Codec.record (\x1 x2 x3 x4 -> { created = x1, status = x2, content = x3, notification = x4 })
-        |> Codec.field "created" .created Time.Codec.posix
-        |> Codec.field "status" .status (Codec.maybe Reference.codec)
-        |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
-        |> Codec.field "notification" .notification messageNotificationCodec
+        |> Codec.field .created Time.Codec.posix
+        |> Codec.field .status (Codec.maybe Reference.codec)
+        |> Codec.field .content ElmShop.Document.Utils.Html.codec
+        |> Codec.field .notification messageNotificationCodec
         |> Codec.buildRecord
 
 
@@ -222,8 +222,8 @@ messageNotificationCodec =
                         NotifyClient ->
                             fn2
                 )
-                |> Codec.variant0 "NoNotification" NoNotification
-                |> Codec.variant0 "NotifyClient" NotifyClient
+                |> Codec.variant0 NoNotification
+                |> Codec.variant0 NotifyClient
                 |> Codec.buildCustom
         )
 
@@ -231,32 +231,32 @@ messageNotificationCodec =
 paymentCodec : Codec.Codec Payment
 paymentCodec =
     Codec.record (\x1 x2 x3 x4 -> { created = x1, name = x2, price = x3, payment = x4 })
-        |> Codec.field "created" .created Time.Codec.posix
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
-        |> Codec.field "payment" .payment Reference.codec
+        |> Codec.field .created Time.Codec.posix
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .price ElmShop.Document.Utils.Money.codec
+        |> Codec.field .payment Reference.codec
         |> Codec.buildRecord
 
 
 shippingCodec : Codec.Codec Shipping
 shippingCodec =
     Codec.record (\x1 x2 x3 x4 x5 -> { created = x1, name = x2, price = x3, address = x4, shipping = x5 })
-        |> Codec.field "created" .created Time.Codec.posix
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
-        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
-        |> Codec.field "shipping" .shipping Reference.codec
+        |> Codec.field .created Time.Codec.posix
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .price ElmShop.Document.Utils.Money.codec
+        |> Codec.field .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
+        |> Codec.field .shipping Reference.codec
         |> Codec.buildRecord
 
 
 cartItemCodec : Codec.Codec CartItem
 cartItemCodec =
     Codec.record (\x1 x2 x3 x4 x5 -> { created = x1, name = x2, price = x3, quantity = x4, type_ = x5 })
-        |> Codec.field "created" .created Time.Codec.posix
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
-        |> Codec.field "quantity" .quantity ElmShop.Document.Utils.Quantity.codec
-        |> Codec.field "type_" .type_ cartItemTypeCodec
+        |> Codec.field .created Time.Codec.posix
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .price ElmShop.Document.Utils.Money.codec
+        |> Codec.field .quantity ElmShop.Document.Utils.Quantity.codec
+        |> Codec.field .type_ cartItemTypeCodec
         |> Codec.buildRecord
 
 
@@ -270,7 +270,7 @@ cartItemTypeCodec =
                         ProductCartItem x1 x2 ->
                             fn1 x1 x2
                 )
-                |> Codec.variant2 "ProductCartItem" ProductCartItem Reference.codec (Codec.maybe Reference.codec)
+                |> Codec.variant2 ProductCartItem Reference.codec (Codec.maybe Reference.codec)
                 |> Codec.buildCustom
         )
 
@@ -278,16 +278,16 @@ cartItemTypeCodec =
 currencyCodec : Codec.Codec Currency
 currencyCodec =
     Codec.record (\x1 x2 -> { id = x1, value = x2 })
-        |> Codec.field "id" .id Reference.codec
-        |> Codec.field "value" .value ElmShop.Document.Utils.Money.codec
+        |> Codec.field .id Reference.codec
+        |> Codec.field .value ElmShop.Document.Utils.Money.codec
         |> Codec.buildRecord
 
 
 billingCodec : Codec.Codec Billing
 billingCodec =
     Codec.record (\x1 x2 -> { address = x1, note = x2 })
-        |> Codec.field "address" .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
-        |> Codec.field "note" .note billingNoteCodec
+        |> Codec.field .address (Codec.maybe ElmShop.Document.Utils.Address.codec)
+        |> Codec.field .note billingNoteCodec
         |> Codec.buildRecord
 
 
@@ -301,7 +301,7 @@ billingNoteCodec =
                         BillingNote x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "BillingNote" BillingNote Codec.string
+                |> Codec.variant1 BillingNote Codec.string
                 |> Codec.buildCustom
         )
 
@@ -309,10 +309,10 @@ billingNoteCodec =
 clientCodec : Codec.Codec Client
 clientCodec =
     Codec.record (\x1 x2 x3 x4 -> { email = x1, phone = x2, timeZone = x3, note = x4 })
-        |> Codec.field "email" .email ElmShop.Document.Utils.Email.codec
-        |> Codec.field "phone" .phone ElmShop.Document.Utils.Phone.codec
-        |> Codec.field "timeZone" .timeZone ElmShop.Document.Utils.TimeZone.codec
-        |> Codec.field "note" .note clientNoteCodec
+        |> Codec.field .email ElmShop.Document.Utils.Email.codec
+        |> Codec.field .phone ElmShop.Document.Utils.Phone.codec
+        |> Codec.field .timeZone ElmShop.Document.Utils.TimeZone.codec
+        |> Codec.field .note clientNoteCodec
         |> Codec.buildRecord
 
 
@@ -326,7 +326,7 @@ clientNoteCodec =
                         ClientNote x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "ClientNote" ClientNote Codec.string
+                |> Codec.variant1 ClientNote Codec.string
                 |> Codec.buildCustom
         )
 
@@ -341,7 +341,7 @@ numberCodec =
                         Number x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Number" Number Codec.int
+                |> Codec.variant1 Number Codec.int
                 |> Codec.buildCustom
         )
 

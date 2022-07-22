@@ -62,15 +62,15 @@ type Rounding
 codec : Codec.Codec Currency
 codec =
     Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 -> { name = x1, translations = x2, code = x3, value = x4, decimalPlaces = x5, rounding = x6, symbolLeft = x7, symbolRight = x8, meta = x9 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "code" .code codeCodec
-        |> Codec.field "value" .value ElmShop.Document.Utils.Money.codec
-        |> Codec.field "decimalPlaces" .decimalPlaces ElmShop.Document.Utils.Money.decimalPlacesCodec
-        |> Codec.field "rounding" .rounding (Codec.maybe roundingCodec)
-        |> Codec.field "symbolLeft" .symbolLeft Codec.string
-        |> Codec.field "symbolRight" .symbolRight Codec.string
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field .code codeCodec
+        |> Codec.field .value ElmShop.Document.Utils.Money.codec
+        |> Codec.field .decimalPlaces ElmShop.Document.Utils.Money.decimalPlacesCodec
+        |> Codec.field .rounding (Codec.maybe roundingCodec)
+        |> Codec.field .symbolLeft Codec.string
+        |> Codec.field .symbolRight Codec.string
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -84,7 +84,7 @@ roundingCodec =
                         Rounding x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Rounding" Rounding Codec.int
+                |> Codec.variant1 Rounding Codec.int
                 |> Codec.buildCustom
         )
 
@@ -99,7 +99,7 @@ codeCodec =
                         Code x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Code" Code Codec.string
+                |> Codec.variant1 Code Codec.string
                 |> Codec.buildCustom
         )
 
@@ -107,7 +107,7 @@ codeCodec =
 translationCodec : Codec.Codec Translation
 translationCodec =
     Codec.record (\x1 -> { name = x1 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
         |> Codec.buildRecord
 
 

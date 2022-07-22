@@ -129,34 +129,34 @@ type StockQuantity
 codec : Codec.Codec Product
 codec =
     Codec.record (\x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 -> { type_ = x1, sale = x2, translations = x3, sku = x4, stock = x5, reservations = x6, image = x7, gallery = x8, attributes = x9, related = x10, categories = x11, meta = x12 })
-        |> Codec.field "type_" .type_ typeCodec
-        |> Codec.field "sale" .sale saleCodec
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "sku" .sku (Codec.maybe skuCodec)
-        |> Codec.field "stock"
+        |> Codec.field .type_ typeCodec
+        |> Codec.field .sale saleCodec
+        |> Codec.field .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field .sku (Codec.maybe skuCodec)
+        |> Codec.field
             .stock
             (Dict.Any.Codec.dict Reference.toString
                 Reference.codec
                 (Codec.record (\x1 -> { quantity = x1 })
-                    |> Codec.field "quantity" .quantity stockQuantityCodec
+                    |> Codec.field .quantity stockQuantityCodec
                     |> Codec.buildRecord
                 )
             )
-        |> Codec.field "reservations" .reservations reservationsCodec
-        |> Codec.field "image" .image (Codec.maybe Reference.codec)
-        |> Codec.field "gallery"
+        |> Codec.field .reservations reservationsCodec
+        |> Codec.field .image (Codec.maybe Reference.codec)
+        |> Codec.field
             .gallery
             (Dict.Any.Codec.dict Reference.toString
                 Reference.codec
                 (Codec.record (\x1 -> { order = x1 })
-                    |> Codec.field "order" .order ElmShop.Document.Utils.Order.codec
+                    |> Codec.field .order ElmShop.Document.Utils.Order.codec
                     |> Codec.buildRecord
                 )
             )
-        |> Codec.field "attributes" .attributes (Dict.Any.Codec.dict Reference.toString Reference.codec ElmShop.Document.Utils.AttributeValue.codec)
-        |> Codec.field "related" .related (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
-        |> Codec.field "categories" .categories (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .attributes (Dict.Any.Codec.dict Reference.toString Reference.codec ElmShop.Document.Utils.AttributeValue.codec)
+        |> Codec.field .related (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
+        |> Codec.field .categories (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -170,7 +170,7 @@ reservationsCodec =
                         Reservations x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Reservations" Reservations Codec.int
+                |> Codec.variant1 Reservations Codec.int
                 |> Codec.buildCustom
         )
 
@@ -185,7 +185,7 @@ stockQuantityCodec =
                         StockQuantity x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "StockQuantity" StockQuantity Codec.int
+                |> Codec.variant1 StockQuantity Codec.int
                 |> Codec.buildCustom
         )
 
@@ -200,7 +200,7 @@ skuCodec =
                         Sku x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Sku" Sku Codec.string
+                |> Codec.variant1 Sku Codec.string
                 |> Codec.buildCustom
         )
 
@@ -208,8 +208,8 @@ skuCodec =
 translationCodec : Codec.Codec Translation
 translationCodec =
     Codec.record (\x1 x2 -> { name = x1, content = x2 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .content ElmShop.Document.Utils.Html.codec
         |> Codec.buildRecord
 
 
@@ -226,8 +226,8 @@ saleCodec =
                         NotForSale ->
                             fn2
                 )
-                |> Codec.variant0 "ForSale" ForSale
-                |> Codec.variant0 "NotForSale" NotForSale
+                |> Codec.variant0 ForSale
+                |> Codec.variant0 NotForSale
                 |> Codec.buildCustom
         )
 
@@ -235,30 +235,30 @@ saleCodec =
 setCodec : Codec.Codec Set
 setCodec =
     Codec.record (\x1 x2 -> { products = x1, price = x2 })
-        |> Codec.field "products"
+        |> Codec.field
             .products
             (Dict.Any.Codec.dict Reference.toString
                 Reference.codec
                 (Codec.record (\x1 -> { quantity = x1 })
-                    |> Codec.field "quantity" .quantity ElmShop.Document.Utils.Quantity.codec
+                    |> Codec.field .quantity ElmShop.Document.Utils.Quantity.codec
                     |> Codec.buildRecord
                 )
             )
-        |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
+        |> Codec.field .price ElmShop.Document.Utils.Money.codec
         |> Codec.buildRecord
 
 
 variableCodec : Codec.Codec Variable
 variableCodec =
     Codec.record (\x1 -> { products = x1 })
-        |> Codec.field "products" .products (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
+        |> Codec.field .products (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
         |> Codec.buildRecord
 
 
 singleCodec : Codec.Codec Single
 singleCodec =
     Codec.record (\x1 -> { price = x1 })
-        |> Codec.field "price" .price ElmShop.Document.Utils.Money.codec
+        |> Codec.field .price ElmShop.Document.Utils.Money.codec
         |> Codec.buildRecord
 
 
@@ -278,9 +278,9 @@ typeCodec =
                         Set_ x1 ->
                             fn3 x1
                 )
-                |> Codec.variant1 "Single_" Single_ singleCodec
-                |> Codec.variant1 "Variable_" Variable_ variableCodec
-                |> Codec.variant1 "Set_" Set_ setCodec
+                |> Codec.variant1 Single_ singleCodec
+                |> Codec.variant1 Variable_ variableCodec
+                |> Codec.variant1 Set_ setCodec
                 |> Codec.buildCustom
         )
 

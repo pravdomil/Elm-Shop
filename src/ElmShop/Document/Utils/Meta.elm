@@ -74,12 +74,12 @@ type TimeModified
 codec : Codec.Codec Meta
 codec =
     Codec.record (\x1 x2 x3 x4 x5 x6 -> { status = x1, created = x2, modified = x3, author = x4, order = x5, note = x6 })
-        |> Codec.field "status" .status statusCodec
-        |> Codec.field "created" .created timeCreatedCodec
-        |> Codec.field "modified" .modified timeModifiedCodec
-        |> Codec.field "author" .author (Codec.maybe Reference.codec)
-        |> Codec.field "order" .order ElmShop.Document.Utils.Order.codec
-        |> Codec.field "note" .note ElmShop.Document.Utils.Note.codec
+        |> Codec.field .status statusCodec
+        |> Codec.field .created timeCreatedCodec
+        |> Codec.field .modified timeModifiedCodec
+        |> Codec.field .author (Codec.maybe Reference.codec)
+        |> Codec.field .order ElmShop.Document.Utils.Order.codec
+        |> Codec.field .note ElmShop.Document.Utils.Note.codec
         |> Codec.buildRecord
 
 
@@ -91,7 +91,7 @@ timeModifiedCodec =
                 TimeModified x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "TimeModified" TimeModified Time.Codec.posix
+        |> Codec.variant1 TimeModified Time.Codec.posix
         |> Codec.buildCustom
 
 
@@ -103,7 +103,7 @@ timeCreatedCodec =
                 TimeCreated x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "TimeCreated" TimeCreated Time.Codec.posix
+        |> Codec.variant1 TimeCreated Time.Codec.posix
         |> Codec.buildCustom
 
 
@@ -121,9 +121,9 @@ statusCodec =
                 Trashed x1 ->
                     fn3 x1
         )
-        |> Codec.variant1 "Draft" Draft Time.Codec.posix
-        |> Codec.variant1 "Published" Published Time.Codec.posix
-        |> Codec.variant1 "Trashed" Trashed Time.Codec.posix
+        |> Codec.variant1 Draft Time.Codec.posix
+        |> Codec.variant1 Published Time.Codec.posix
+        |> Codec.variant1 Trashed Time.Codec.posix
         |> Codec.buildCustom
 
 

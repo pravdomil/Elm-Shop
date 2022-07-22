@@ -30,8 +30,7 @@ codec =
                 Email x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "Email"
-            Email
+        |> Codec.variant1 Email
             (Codec.string
                 |> Codec.andThen
                     identity

@@ -34,11 +34,11 @@ type Rating
 codec : Codec.Codec Review
 codec =
     Codec.record (\x1 x2 x3 x4 x5 -> { order = x1, product = x2, content = x3, rating = x4, meta = x5 })
-        |> Codec.field "order" .order Reference.codec
-        |> Codec.field "product" .product Reference.codec
-        |> Codec.field "content" .content ElmShop.Document.Utils.Text.codec
-        |> Codec.field "rating" .rating ratingCodec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .order Reference.codec
+        |> Codec.field .product Reference.codec
+        |> Codec.field .content ElmShop.Document.Utils.Text.codec
+        |> Codec.field .rating ratingCodec
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -52,7 +52,7 @@ ratingCodec =
                         Rating x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Rating" Rating Codec.int
+                |> Codec.variant1 Rating Codec.int
                 |> Codec.buildCustom
         )
 

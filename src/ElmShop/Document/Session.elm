@@ -44,9 +44,9 @@ create =
 codec : Codec.Codec Session
 codec =
     Codec.record (\x1 x2 x3 -> { user = x1, order = x2, meta = x3 })
-        |> Codec.field "user" .user (Codec.maybe Reference.codec)
-        |> Codec.field "order" .order (Codec.maybe Reference.codec)
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .user (Codec.maybe Reference.codec)
+        |> Codec.field .order (Codec.maybe Reference.codec)
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 

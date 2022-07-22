@@ -78,33 +78,33 @@ type alias Comgate =
 codec : Codec.Codec Payment
 codec =
     Codec.record (\x1 x2 x3 -> { translations = x1, type_ = x2, meta = x3 })
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "type_" .type_ typeCodec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field .type_ typeCodec
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
 comgateCodec : Codec.Codec Comgate
 comgateCodec =
     Codec.record (\x1 x2 x3 -> { merchantId = x1, secret = x2, test = x3 })
-        |> Codec.field "merchantId" .merchantId Codec.string
-        |> Codec.field "secret" .secret Codec.string
-        |> Codec.field "test" .test Codec.bool
+        |> Codec.field .merchantId Codec.string
+        |> Codec.field .secret Codec.string
+        |> Codec.field .test Codec.bool
         |> Codec.buildRecord
 
 
 payPalCodec : Codec.Codec PayPal
 payPalCodec =
     Codec.record (\x1 x2 -> { email = x1, test = x2 })
-        |> Codec.field "email" .email ElmShop.Document.Utils.Email.codec
-        |> Codec.field "test" .test Codec.bool
+        |> Codec.field .email ElmShop.Document.Utils.Email.codec
+        |> Codec.field .test Codec.bool
         |> Codec.buildRecord
 
 
 bankTransferCodec : Codec.Codec BankTransfer
 bankTransferCodec =
     Codec.record (\x1 -> { orderStatus = x1 })
-        |> Codec.field "orderStatus" .orderStatus Reference.codec
+        |> Codec.field .orderStatus Reference.codec
         |> Codec.buildRecord
 
 
@@ -124,9 +124,9 @@ typeCodec =
                         Comgate_ x1 ->
                             fn3 x1
                 )
-                |> Codec.variant1 "BankTransfer_" BankTransfer_ bankTransferCodec
-                |> Codec.variant1 "PayPal_" PayPal_ payPalCodec
-                |> Codec.variant1 "Comgate_" Comgate_ comgateCodec
+                |> Codec.variant1 BankTransfer_ bankTransferCodec
+                |> Codec.variant1 PayPal_ payPalCodec
+                |> Codec.variant1 Comgate_ comgateCodec
                 |> Codec.buildCustom
         )
 
@@ -134,8 +134,8 @@ typeCodec =
 translationCodec : Codec.Codec Translation
 translationCodec =
     Codec.record (\x1 x2 -> { name = x1, content = x2 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .content ElmShop.Document.Utils.Html.codec
         |> Codec.buildRecord
 
 

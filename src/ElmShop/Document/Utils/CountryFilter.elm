@@ -24,8 +24,8 @@ codec =
                 Deny x1 ->
                     fn2 x1
         )
-        |> Codec.variant1 "Allow" Allow (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
-        |> Codec.variant1 "Deny" Deny (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
+        |> Codec.variant1 Allow (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
+        |> Codec.variant1 Deny (Dict.Any.Codec.dict Reference.toString Reference.codec (Codec.succeed ()))
         |> Codec.buildCustom
 
 

@@ -22,16 +22,16 @@ codec =
                 AttributeValue x1 ->
                     fn2 x1
         )
-        |> Codec.variant1 "StringValue"
+        |> Codec.variant1
             StringValue
             (Codec.record (\x1 -> { value = x1 })
-                |> Codec.field "value" .value Codec.string
+                |> Codec.field .value Codec.string
                 |> Codec.buildRecord
             )
-        |> Codec.variant1 "AttributeValue"
+        |> Codec.variant1
             AttributeValue
             (Codec.record (\x1 -> { value = x1 })
-                |> Codec.field "value" .value Reference.codec
+                |> Codec.field .value Reference.codec
                 |> Codec.buildRecord
             )
         |> Codec.buildCustom

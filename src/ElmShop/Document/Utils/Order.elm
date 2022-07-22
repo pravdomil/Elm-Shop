@@ -31,7 +31,7 @@ codec =
                 Order x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "Order" Order Codec.float
+        |> Codec.variant1 Order Codec.float
         |> Codec.buildCustom
 
 

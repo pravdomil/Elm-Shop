@@ -39,8 +39,7 @@ codec =
                 Password x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "Password"
-            Password
+        |> Codec.variant1 Password
             (Codec.string
                 |> Codec.andThen
                     identity

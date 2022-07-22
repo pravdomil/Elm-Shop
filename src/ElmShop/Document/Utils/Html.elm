@@ -26,7 +26,7 @@ codec =
                 Html x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "Html" Html Codec.string
+        |> Codec.variant1 Html Codec.string
         |> Codec.buildCustom
 
 

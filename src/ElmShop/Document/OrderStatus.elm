@@ -47,9 +47,9 @@ type Stock
 codec : Codec.Codec OrderStatus
 codec =
     Codec.record (\x1 x2 x3 -> { translations = x1, stock = x2, meta = x3 })
-        |> Codec.field "translations" .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
-        |> Codec.field "stock" .stock stockCodec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .translations (Dict.Any.Codec.dict Reference.toString Reference.codec translationCodec)
+        |> Codec.field .stock stockCodec
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -69,9 +69,9 @@ stockCodec =
                         Subtract ->
                             fn3
                 )
-                |> Codec.variant0 "NoChange" NoChange
-                |> Codec.variant0 "Reserve" Reserve
-                |> Codec.variant0 "Subtract" Subtract
+                |> Codec.variant0 NoChange
+                |> Codec.variant0 Reserve
+                |> Codec.variant0 Subtract
                 |> Codec.buildCustom
         )
 
@@ -79,8 +79,8 @@ stockCodec =
 translationCodec : Codec.Codec Translation
 translationCodec =
     Codec.record (\x1 x2 -> { name = x1, content = x2 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "content" .content ElmShop.Document.Utils.Html.codec
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .content ElmShop.Document.Utils.Html.codec
         |> Codec.buildRecord
 
 

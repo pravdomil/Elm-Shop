@@ -52,8 +52,7 @@ decimalPlacesCodec =
                 DecimalPlaces x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "DecimalPlaces"
-            DecimalPlaces
+        |> Codec.variant1 DecimalPlaces
             (Codec.int
                 |> Codec.andThen
                     identity
@@ -79,7 +78,7 @@ codec =
                         Money x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Money" Money Codec.int
+                |> Codec.variant1 Money Codec.int
                 |> Codec.buildCustom
         )
 

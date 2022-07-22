@@ -25,13 +25,13 @@ type alias Address =
 codec : Codec.Codec Address
 codec =
     Codec.record (\x1 x2 x3 x4 x5 x6 x7 -> { name = x1, organization = x2, address1 = x3, address2 = x4, city = x5, postcode = x6, state = x7 })
-        |> Codec.field "name" .name Codec.string
-        |> Codec.field "organization" .organization Codec.string
-        |> Codec.field "address1" .address1 Codec.string
-        |> Codec.field "address2" .address2 Codec.string
-        |> Codec.field "city" .city Codec.string
-        |> Codec.field "postcode" .postcode Codec.string
-        |> Codec.field "state" .state Reference.codec
+        |> Codec.field .name Codec.string
+        |> Codec.field .organization Codec.string
+        |> Codec.field .address1 Codec.string
+        |> Codec.field .address2 Codec.string
+        |> Codec.field .city Codec.string
+        |> Codec.field .postcode Codec.string
+        |> Codec.field .state Reference.codec
         |> Codec.buildRecord
 
 

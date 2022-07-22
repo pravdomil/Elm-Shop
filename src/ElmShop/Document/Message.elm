@@ -41,10 +41,10 @@ type Type
 codec : Codec.Codec Message
 codec =
     Codec.record (\x1 x2 x3 x4 -> { type_ = x1, message = x2, related = x3, meta = x4 })
-        |> Codec.field "type_" .type_ typeCodec
-        |> Codec.field "message" .message contentCodec
-        |> Codec.field "related" .related (Codec.list Reference.codec)
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .type_ typeCodec
+        |> Codec.field .message contentCodec
+        |> Codec.field .related (Codec.list Reference.codec)
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
@@ -58,7 +58,7 @@ contentCodec =
                         Content x1 ->
                             fn1 x1
                 )
-                |> Codec.variant1 "Content" Content Codec.string
+                |> Codec.variant1 Content Codec.string
                 |> Codec.buildCustom
         )
 
@@ -79,9 +79,9 @@ typeCodec =
                         Error ->
                             fn3
                 )
-                |> Codec.variant0 "Info" Info
-                |> Codec.variant0 "Warning" Warning
-                |> Codec.variant0 "Error" Error
+                |> Codec.variant0 Info
+                |> Codec.variant0 Warning
+                |> Codec.variant0 Error
                 |> Codec.buildCustom
         )
 

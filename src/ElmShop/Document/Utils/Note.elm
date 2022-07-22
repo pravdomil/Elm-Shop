@@ -26,7 +26,7 @@ codec =
                 Note x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "Note" Note Codec.string
+        |> Codec.variant1 Note Codec.string
         |> Codec.buildCustom
 
 

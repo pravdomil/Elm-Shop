@@ -35,8 +35,7 @@ codec =
                 Name x1 ->
                     fn1 x1
         )
-        |> Codec.variant1 "Name"
-            Name
+        |> Codec.variant1 Name
             (Codec.string
                 |> Codec.andThen
                     identity

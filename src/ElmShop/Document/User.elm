@@ -49,10 +49,10 @@ create =
 codec : Codec.Codec User
 codec =
     Codec.record (\x1 x2 x3 x4 -> { name = x1, email = x2, password = x3, meta = x4 })
-        |> Codec.field "name" .name ElmShop.Document.Utils.Name.codec
-        |> Codec.field "email" .email (Codec.maybe ElmShop.Document.Utils.Email.codec)
-        |> Codec.field "password" .password ElmShop.Document.Utils.Password.codec
-        |> Codec.field "meta" .meta ElmShop.Document.Utils.Meta.codec
+        |> Codec.field .name ElmShop.Document.Utils.Name.codec
+        |> Codec.field .email (Codec.maybe ElmShop.Document.Utils.Email.codec)
+        |> Codec.field .password ElmShop.Document.Utils.Password.codec
+        |> Codec.field .meta ElmShop.Document.Utils.Meta.codec
         |> Codec.buildRecord
 
 
