@@ -48,7 +48,7 @@ type_ =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "TimeZone" ] "TimeZone"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "TimeZone", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "TimeZone", arguments = [ Dataman.Type.toAny Dataman.Type.int ] }
             , []
             )
         }

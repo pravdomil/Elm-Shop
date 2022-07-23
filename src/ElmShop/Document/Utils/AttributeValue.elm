@@ -50,7 +50,7 @@ type_ =
                             { name = Nothing
                             , documentation = Nothing
                             , fields =
-                                [ { name = Dataman.Type.FieldName "value", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+                                [ { name = Dataman.Type.FieldName "value", type_ = Dataman.Type.toAny Dataman.Type.string }
                                 ]
                             }
                         )
@@ -63,7 +63,7 @@ type_ =
                             { name = Nothing
                             , documentation = Nothing
                             , fields =
-                                [ { name = Dataman.Type.FieldName "value", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.attributeType) }
+                                [ { name = Dataman.Type.FieldName "value", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.attributeType) }
                                 ]
                             }
                         )

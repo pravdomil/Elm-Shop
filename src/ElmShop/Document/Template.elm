@@ -107,7 +107,7 @@ contentType =
             , [ { name = Dataman.Type.VariantName "Localized"
                 , arguments =
                     [ Dataman.Type.toAny
-                        ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType)
+                        (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.languageType)
                             (Dataman.Type.Record_
                                 { name = Nothing
                                 , documentation = Nothing

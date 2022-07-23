@@ -41,12 +41,12 @@ type_ =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Address" ] "Address")
         , documentation = Just (Dataman.Type.Documentation "More information:\\n<https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fe-autocomplete-organization>\\n<https://developers.google.com/web/updates/2015/06/checkout-faster-with-autofill#address>\\n<https://developers.google.com/web/fundamentals/design-and-ux/input/forms#recommended_input_name_and_autocomplete_attribute_values>")
         , fields =
-            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
-            , { name = Dataman.Type.FieldName "organization", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
-            , { name = Dataman.Type.FieldName "address1", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
-            , { name = Dataman.Type.FieldName "address2", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
-            , { name = Dataman.Type.FieldName "city", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
-            , { name = Dataman.Type.FieldName "postcode", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
-            , { name = Dataman.Type.FieldName "state", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.countryType) }
+            [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny Dataman.Type.string }
+            , { name = Dataman.Type.FieldName "organization", type_ = Dataman.Type.toAny Dataman.Type.string }
+            , { name = Dataman.Type.FieldName "address1", type_ = Dataman.Type.toAny Dataman.Type.string }
+            , { name = Dataman.Type.FieldName "address2", type_ = Dataman.Type.toAny Dataman.Type.string }
+            , { name = Dataman.Type.FieldName "city", type_ = Dataman.Type.toAny Dataman.Type.string }
+            , { name = Dataman.Type.FieldName "postcode", type_ = Dataman.Type.toAny Dataman.Type.string }
+            , { name = Dataman.Type.FieldName "state", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.countryType) }
             ]
         }

@@ -63,8 +63,8 @@ type_ =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Review" ] "Review")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "order", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.orderType) }
-            , { name = Dataman.Type.FieldName "product", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.productType) }
+            [ { name = Dataman.Type.FieldName "order", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.orderType) }
+            , { name = Dataman.Type.FieldName "product", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.productType) }
             , { name = Dataman.Type.FieldName "content", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Text.type_ }
             , { name = Dataman.Type.FieldName "rating", type_ = Dataman.Type.toAny ratingType }
             , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
@@ -78,7 +78,7 @@ ratingType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Review" ] "Rating"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Rating", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Rating", arguments = [ Dataman.Type.toAny Dataman.Type.int ] }
             , []
             )
         }

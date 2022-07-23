@@ -355,13 +355,13 @@ type_ =
             [ { name = Dataman.Type.FieldName "number", type_ = Dataman.Type.toAny numberType }
             , { name = Dataman.Type.FieldName "client", type_ = Dataman.Type.toAny clientType }
             , { name = Dataman.Type.FieldName "billing", type_ = Dataman.Type.toAny billingType }
-            , { name = Dataman.Type.FieldName "site", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.siteType) }
-            , { name = Dataman.Type.FieldName "language", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) }
+            , { name = Dataman.Type.FieldName "site", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.siteType) }
+            , { name = Dataman.Type.FieldName "language", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.languageType) }
             , { name = Dataman.Type.FieldName "currency", type_ = Dataman.Type.toAny currencyType }
-            , { name = Dataman.Type.FieldName "cart", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Id >> Dataman.Type.Opaque_) cartItemType) cartItemType) }
-            , { name = Dataman.Type.FieldName "shipping", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Id >> Dataman.Type.Opaque_) shippingType) shippingType) }
-            , { name = Dataman.Type.FieldName "payments", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Id >> Dataman.Type.Opaque_) paymentType) paymentType) }
-            , { name = Dataman.Type.FieldName "messages", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Id >> Dataman.Type.Opaque_) messageType) messageType) }
+            , { name = Dataman.Type.FieldName "cart", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.id cartItemType) cartItemType) }
+            , { name = Dataman.Type.FieldName "shipping", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.id shippingType) shippingType) }
+            , { name = Dataman.Type.FieldName "payments", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.id paymentType) paymentType) }
+            , { name = Dataman.Type.FieldName "messages", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.id messageType) messageType) }
             , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
             ]
         }
@@ -373,7 +373,7 @@ numberType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Order" ] "Number"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Number", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Number", arguments = [ Dataman.Type.toAny Dataman.Type.int ] }
             , []
             )
         }
@@ -399,7 +399,7 @@ clientNoteType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Order" ] "ClientNote"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "ClientNote", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "ClientNote", arguments = [ Dataman.Type.toAny Dataman.Type.string ] }
             , []
             )
         }
@@ -423,7 +423,7 @@ billingNoteType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Order" ] "BillingNote"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "BillingNote", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "BillingNote", arguments = [ Dataman.Type.toAny Dataman.Type.string ] }
             , []
             )
         }
@@ -435,7 +435,7 @@ currencyType =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Order" ] "Currency")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "id", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.currencyType) }
+            [ { name = Dataman.Type.FieldName "id", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.currencyType) }
             , { name = Dataman.Type.FieldName "value", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Money.type_ }
             ]
         }
@@ -447,7 +447,7 @@ cartItemType =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Order" ] "CartItem")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) }
+            [ { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny Dataman.Type.timePosix }
             , { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
             , { name = Dataman.Type.FieldName "price", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Money.type_ }
             , { name = Dataman.Type.FieldName "quantity", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Quantity.type_ }
@@ -462,7 +462,7 @@ cartItemTypeType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Order" ] "CartItemType"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "ProductCartItem", arguments = [ Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.productType), Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.productType)) ] }
+            ( { name = Dataman.Type.VariantName "ProductCartItem", arguments = [ Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.productType), Dataman.Type.toAny (Dataman.Type.maybe (Dataman.Type.reference ElmShop.Document.Type.productType)) ] }
             , []
             )
         }
@@ -474,11 +474,11 @@ shippingType =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Order" ] "Shipping")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) }
+            [ { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny Dataman.Type.timePosix }
             , { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
             , { name = Dataman.Type.FieldName "price", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Money.type_ }
             , { name = Dataman.Type.FieldName "address", type_ = Dataman.Type.toAny (Dataman.Type.maybe ElmShop.Document.Utils.Address.type_) }
-            , { name = Dataman.Type.FieldName "shipping", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.shippingType) }
+            , { name = Dataman.Type.FieldName "shipping", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.shippingType) }
             ]
         }
 
@@ -489,10 +489,10 @@ paymentType =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Order" ] "Payment")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) }
+            [ { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny Dataman.Type.timePosix }
             , { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
             , { name = Dataman.Type.FieldName "price", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Money.type_ }
-            , { name = Dataman.Type.FieldName "payment", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.paymentType) }
+            , { name = Dataman.Type.FieldName "payment", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.paymentType) }
             ]
         }
 
@@ -503,8 +503,8 @@ messageType =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Order" ] "Message")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) }
-            , { name = Dataman.Type.FieldName "status", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.orderStatusType)) }
+            [ { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny Dataman.Type.timePosix }
+            , { name = Dataman.Type.FieldName "status", type_ = Dataman.Type.toAny (Dataman.Type.maybe (Dataman.Type.reference ElmShop.Document.Type.orderStatusType)) }
             , { name = Dataman.Type.FieldName "content", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Html.type_ }
             , { name = Dataman.Type.FieldName "notification", type_ = Dataman.Type.toAny messageNotificationType }
             ]

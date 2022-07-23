@@ -57,7 +57,7 @@ type_ =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Name" ] "Name"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Name", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Name", arguments = [ Dataman.Type.toAny Dataman.Type.string ] }
             , []
             )
         }

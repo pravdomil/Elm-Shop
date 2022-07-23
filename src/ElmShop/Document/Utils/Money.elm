@@ -89,7 +89,7 @@ type_ =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Money" ] "Money"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Money", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Money", arguments = [ Dataman.Type.toAny Dataman.Type.int ] }
             , []
             )
         }
@@ -101,7 +101,7 @@ decimalPlacesType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Money" ] "DecimalPlaces"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "DecimalPlaces", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "DecimalPlaces", arguments = [ Dataman.Type.toAny Dataman.Type.int ] }
             , []
             )
         }

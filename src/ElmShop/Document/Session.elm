@@ -56,8 +56,8 @@ type_ =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Session" ] "Session")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "user", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.userType)) }
-            , { name = Dataman.Type.FieldName "order", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.orderType)) }
+            [ { name = Dataman.Type.FieldName "user", type_ = Dataman.Type.toAny (Dataman.Type.maybe (Dataman.Type.reference ElmShop.Document.Type.userType)) }
+            , { name = Dataman.Type.FieldName "order", type_ = Dataman.Type.toAny (Dataman.Type.maybe (Dataman.Type.reference ElmShop.Document.Type.orderType)) }
             , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
             ]
         }

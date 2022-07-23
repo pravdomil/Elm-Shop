@@ -136,7 +136,7 @@ type_ =
             [ { name = Dataman.Type.FieldName "status", type_ = Dataman.Type.toAny statusType }
             , { name = Dataman.Type.FieldName "created", type_ = Dataman.Type.toAny timeCreatedType }
             , { name = Dataman.Type.FieldName "modified", type_ = Dataman.Type.toAny timeModifiedType }
-            , { name = Dataman.Type.FieldName "author", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.userType)) }
+            , { name = Dataman.Type.FieldName "author", type_ = Dataman.Type.toAny (Dataman.Type.maybe (Dataman.Type.reference ElmShop.Document.Type.userType)) }
             , { name = Dataman.Type.FieldName "order", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Order.type_ }
             , { name = Dataman.Type.FieldName "note", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Note.type_ }
             ]
@@ -149,9 +149,9 @@ statusType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Meta" ] "Status"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Draft", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
-            , [ { name = Dataman.Type.VariantName "Published", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
-              , { name = Dataman.Type.VariantName "Trashed", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Draft", arguments = [ Dataman.Type.toAny Dataman.Type.timePosix ] }
+            , [ { name = Dataman.Type.VariantName "Published", arguments = [ Dataman.Type.toAny Dataman.Type.timePosix ] }
+              , { name = Dataman.Type.VariantName "Trashed", arguments = [ Dataman.Type.toAny Dataman.Type.timePosix ] }
               ]
             )
         }
@@ -163,7 +163,7 @@ timeCreatedType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Meta" ] "TimeCreated"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "TimeCreated", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "TimeCreated", arguments = [ Dataman.Type.toAny Dataman.Type.timePosix ] }
             , []
             )
         }
@@ -175,7 +175,7 @@ timeModifiedType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "Meta" ] "TimeModified"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "TimeModified", arguments = [ Dataman.Type.toAny (Dataman.Type.TimePosix |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "TimeModified", arguments = [ Dataman.Type.toAny Dataman.Type.timePosix ] }
             , []
             )
         }

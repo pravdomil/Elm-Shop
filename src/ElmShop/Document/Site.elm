@@ -157,15 +157,15 @@ type_ =
             , { name = Dataman.Type.FieldName "url", type_ = Dataman.Type.toAny urlType }
             , { name = Dataman.Type.FieldName "description", type_ = Dataman.Type.toAny descriptionType }
             , { name = Dataman.Type.FieldName "contact", type_ = Dataman.Type.toAny contactType }
-            , { name = Dataman.Type.FieldName "language", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) }
-            , { name = Dataman.Type.FieldName "homePage", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.pageType) }
-            , { name = Dataman.Type.FieldName "currency", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.currencyType) }
-            , { name = Dataman.Type.FieldName "logo", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.fileType)) }
-            , { name = Dataman.Type.FieldName "icon", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.fileType)) }
+            , { name = Dataman.Type.FieldName "language", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.languageType) }
+            , { name = Dataman.Type.FieldName "homePage", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.pageType) }
+            , { name = Dataman.Type.FieldName "currency", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.currencyType) }
+            , { name = Dataman.Type.FieldName "logo", type_ = Dataman.Type.toAny (Dataman.Type.maybe (Dataman.Type.reference ElmShop.Document.Type.fileType)) }
+            , { name = Dataman.Type.FieldName "icon", type_ = Dataman.Type.toAny (Dataman.Type.maybe (Dataman.Type.reference ElmShop.Document.Type.fileType)) }
             , { name = Dataman.Type.FieldName "header"
               , type_ =
                     Dataman.Type.toAny
-                        ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.pageType)
+                        (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.pageType)
                             (Dataman.Type.Record_
                                 { name = Nothing
                                 , documentation = Nothing
@@ -179,7 +179,7 @@ type_ =
             , { name = Dataman.Type.FieldName "footer"
               , type_ =
                     Dataman.Type.toAny
-                        ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.pageType)
+                        (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.pageType)
                             (Dataman.Type.Record_
                                 { name = Nothing
                                 , documentation = Nothing
@@ -201,7 +201,7 @@ urlType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Site" ] "Url"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Url", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Url", arguments = [ Dataman.Type.toAny Dataman.Type.string ] }
             , []
             )
         }
@@ -213,7 +213,7 @@ descriptionType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Site" ] "Description"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Description", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Description", arguments = [ Dataman.Type.toAny Dataman.Type.string ] }
             , []
             )
         }

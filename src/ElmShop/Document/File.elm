@@ -80,7 +80,7 @@ type_ =
         , documentation = Nothing
         , fields =
             [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
-            , { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) translationType) }
+            , { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.languageType) translationType) }
             , { name = Dataman.Type.FieldName "url", type_ = Dataman.Type.toAny urlType }
             , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
             ]
@@ -104,7 +104,7 @@ urlType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "File" ] "Url"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Url", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Url", arguments = [ Dataman.Type.toAny Dataman.Type.string ] }
             , []
             )
         }

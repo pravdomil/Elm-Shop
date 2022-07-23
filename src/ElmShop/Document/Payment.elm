@@ -145,7 +145,7 @@ type_ =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Payment" ] "Payment")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) translationType) }
+            [ { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.languageType) translationType) }
             , { name = Dataman.Type.FieldName "type_", type_ = Dataman.Type.toAny typeType }
             , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
             ]
@@ -184,7 +184,7 @@ bankTransferType =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Payment" ] "BankTransfer")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "orderStatus", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.orderStatusType) }
+            [ { name = Dataman.Type.FieldName "orderStatus", type_ = Dataman.Type.toAny (Dataman.Type.reference ElmShop.Document.Type.orderStatusType) }
             ]
         }
 
@@ -207,8 +207,8 @@ comgateType =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Payment" ] "Comgate")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "merchantId", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
-            , { name = Dataman.Type.FieldName "secret", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            [ { name = Dataman.Type.FieldName "merchantId", type_ = Dataman.Type.toAny Dataman.Type.string }
+            , { name = Dataman.Type.FieldName "secret", type_ = Dataman.Type.toAny Dataman.Type.string }
             , { name = Dataman.Type.FieldName "test", type_ = Dataman.Type.toAny Dataman.Type.bool }
             ]
         }

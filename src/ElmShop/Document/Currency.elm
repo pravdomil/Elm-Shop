@@ -118,13 +118,13 @@ type_ =
         , documentation = Nothing
         , fields =
             [ { name = Dataman.Type.FieldName "name", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Name.type_ }
-            , { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) translationType) }
+            , { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.languageType) translationType) }
             , { name = Dataman.Type.FieldName "code", type_ = Dataman.Type.toAny codeType }
             , { name = Dataman.Type.FieldName "value", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Money.type_ }
             , { name = Dataman.Type.FieldName "decimalPlaces", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Money.decimalPlacesType }
             , { name = Dataman.Type.FieldName "rounding", type_ = Dataman.Type.toAny (Dataman.Type.maybe roundingType) }
-            , { name = Dataman.Type.FieldName "symbolLeft", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
-            , { name = Dataman.Type.FieldName "symbolRight", type_ = Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) }
+            , { name = Dataman.Type.FieldName "symbolLeft", type_ = Dataman.Type.toAny Dataman.Type.string }
+            , { name = Dataman.Type.FieldName "symbolRight", type_ = Dataman.Type.toAny Dataman.Type.string }
             , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
             ]
         }
@@ -147,7 +147,7 @@ codeType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Currency" ] "Code"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Code", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Code", arguments = [ Dataman.Type.toAny Dataman.Type.string ] }
             , []
             )
         }
@@ -159,7 +159,7 @@ roundingType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Currency" ] "Rounding"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Rounding", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Rounding", arguments = [ Dataman.Type.toAny Dataman.Type.int ] }
             , []
             )
         }

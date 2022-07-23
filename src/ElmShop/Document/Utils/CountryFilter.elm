@@ -35,8 +35,8 @@ type_ =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Utils", "CountryFilter" ] "CountryFilter"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Allow", arguments = [ Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.countryType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) ] }
-            , [ { name = Dataman.Type.VariantName "Deny", arguments = [ Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.countryType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) ] }
+            ( { name = Dataman.Type.VariantName "Allow", arguments = [ Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.countryType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) ] }
+            , [ { name = Dataman.Type.VariantName "Deny", arguments = [ Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.countryType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) ] }
               ]
             )
         }

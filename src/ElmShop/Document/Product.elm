@@ -293,12 +293,12 @@ type_ =
         , fields =
             [ { name = Dataman.Type.FieldName "type_", type_ = Dataman.Type.toAny typeType }
             , { name = Dataman.Type.FieldName "sale", type_ = Dataman.Type.toAny saleType }
-            , { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.languageType) translationType) }
+            , { name = Dataman.Type.FieldName "translations", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.languageType) translationType) }
             , { name = Dataman.Type.FieldName "sku", type_ = Dataman.Type.toAny (Dataman.Type.maybe skuType) }
             , { name = Dataman.Type.FieldName "stock"
               , type_ =
                     Dataman.Type.toAny
-                        ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.warehouseType)
+                        (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.warehouseType)
                             (Dataman.Type.Record_
                                 { name = Nothing
                                 , documentation = Nothing
@@ -310,11 +310,11 @@ type_ =
                         )
               }
             , { name = Dataman.Type.FieldName "reservations", type_ = Dataman.Type.toAny reservationsType }
-            , { name = Dataman.Type.FieldName "image", type_ = Dataman.Type.toAny (Dataman.Type.maybe ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.fileType)) }
+            , { name = Dataman.Type.FieldName "image", type_ = Dataman.Type.toAny (Dataman.Type.maybe (Dataman.Type.reference ElmShop.Document.Type.fileType)) }
             , { name = Dataman.Type.FieldName "gallery"
               , type_ =
                     Dataman.Type.toAny
-                        ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.fileType)
+                        (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.fileType)
                             (Dataman.Type.Record_
                                 { name = Nothing
                                 , documentation = Nothing
@@ -325,9 +325,9 @@ type_ =
                             )
                         )
               }
-            , { name = Dataman.Type.FieldName "attributes", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.attributeType) ElmShop.Document.Utils.AttributeValue.type_) }
-            , { name = Dataman.Type.FieldName "related", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.productType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) }
-            , { name = Dataman.Type.FieldName "categories", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.categoryType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) }
+            , { name = Dataman.Type.FieldName "attributes", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.attributeType) ElmShop.Document.Utils.AttributeValue.type_) }
+            , { name = Dataman.Type.FieldName "related", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.productType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) }
+            , { name = Dataman.Type.FieldName "categories", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.categoryType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) }
             , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
             ]
         }
@@ -364,7 +364,7 @@ variableType =
         { name = Just (Dataman.Type.Name [ "ElmShop", "Document", "Product" ] "Variable")
         , documentation = Nothing
         , fields =
-            [ { name = Dataman.Type.FieldName "products", type_ = Dataman.Type.toAny ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.productType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) }
+            [ { name = Dataman.Type.FieldName "products", type_ = Dataman.Type.toAny (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.productType) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] })) }
             ]
         }
 
@@ -378,7 +378,7 @@ setType =
             [ { name = Dataman.Type.FieldName "products"
               , type_ =
                     Dataman.Type.toAny
-                        ((\x x2 -> Dataman.Type.AnyDict (Dataman.Type.toAny x) (Dataman.Type.toAny x2) |> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) ElmShop.Document.Type.productType)
+                        (Dataman.Type.anyDict (Dataman.Type.reference ElmShop.Document.Type.productType)
                             (Dataman.Type.Record_
                                 { name = Nothing
                                 , documentation = Nothing
@@ -425,7 +425,7 @@ skuType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Product" ] "Sku"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Sku", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Sku", arguments = [ Dataman.Type.toAny Dataman.Type.string ] }
             , []
             )
         }
@@ -437,7 +437,7 @@ stockQuantityType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Product" ] "StockQuantity"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "StockQuantity", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "StockQuantity", arguments = [ Dataman.Type.toAny Dataman.Type.int ] }
             , []
             )
         }
@@ -449,7 +449,7 @@ reservationsType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Product" ] "Reservations"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Reservations", arguments = [ Dataman.Type.toAny (Dataman.Type.Int_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Reservations", arguments = [ Dataman.Type.toAny Dataman.Type.int ] }
             , []
             )
         }

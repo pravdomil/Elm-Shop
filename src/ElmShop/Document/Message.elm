@@ -94,7 +94,7 @@ type_ =
         , fields =
             [ { name = Dataman.Type.FieldName "type_", type_ = Dataman.Type.toAny typeType }
             , { name = Dataman.Type.FieldName "message", type_ = Dataman.Type.toAny contentType }
-            , { name = Dataman.Type.FieldName "related", type_ = Dataman.Type.toAny ((Dataman.Type.toAny >> Dataman.Type.List_ >> Dataman.Type.Opaque_) ((Dataman.Type.toAny >> Dataman.Type.Reference >> Dataman.Type.Opaque_) (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] }))) }
+            , { name = Dataman.Type.FieldName "related", type_ = Dataman.Type.toAny (Dataman.Type.list (Dataman.Type.reference (Dataman.Type.Tuple_ { name = Nothing, documentation = Nothing, arguments = [] }))) }
             , { name = Dataman.Type.FieldName "meta", type_ = Dataman.Type.toAny ElmShop.Document.Utils.Meta.type_ }
             ]
         }
@@ -120,7 +120,7 @@ contentType =
         { name = Dataman.Type.Name [ "ElmShop", "Document", "Message" ] "Content"
         , documentation = Nothing
         , variants =
-            ( { name = Dataman.Type.VariantName "Content", arguments = [ Dataman.Type.toAny (Dataman.Type.String_ |> Dataman.Type.Opaque_) ] }
+            ( { name = Dataman.Type.VariantName "Content", arguments = [ Dataman.Type.toAny Dataman.Type.string ] }
             , []
             )
         }
